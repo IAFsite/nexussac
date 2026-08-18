@@ -1,0 +1,660 @@
+:root {
+
+    --primary: #1F4296;
+    --primary-dark: #23306C;
+
+    --background: #EEF3FF;
+    --surface: #FFFFFF;
+
+    --text: #24324B;
+    --muted: #7B8798;
+
+    --border: #E1E7F0;
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+* {
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    font-family: "Inter", sans-serif;
+
+    background: var(--background);
+
+    color: var(--text);
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-dark)
+        );
+
+    box-shadow:
+        0 4px 20px rgba(0,0,0,.08);
+
+}
+
+
+.header-container {
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 18px 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+/* =========================
+   HEADER BRAND
+========================= */
+
+.header-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    min-width: 0;
+
+}
+
+
+.logo-top {
+
+    width: 64px;
+
+    height: 64px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+
+}
+
+
+.header-title {
+
+    min-width: 0;
+
+}
+
+
+.header-title h2 {
+
+    color: #FFFFFF;
+
+    font-size: 1.15rem;
+
+    font-weight: 700;
+
+    letter-spacing: .4px;
+
+}
+
+
+.header-title p {
+
+    color: rgba(255,255,255,.82);
+
+    font-size: .9rem;
+
+    margin-top: 2px;
+
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    flex-shrink: 0;
+
+    padding: 9px 15px;
+
+    background: rgba(255,255,255,.08);
+
+    border: 1px solid rgba(255,255,255,.35);
+
+    border-radius: 10px;
+
+    color: #FFFFFF;
+
+    text-decoration: none;
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+.back-button:hover {
+
+    background: rgba(255,255,255,.16);
+
+    border-color: rgba(255,255,255,.55);
+
+    transform: translateX(-2px);
+
+    box-shadow:
+        0 5px 14px rgba(0,0,0,.12);
+
+}
+
+
+.back-button:active {
+
+    transform: translateX(0);
+
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.container {
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 50px 20px 70px;
+
+    flex: 1;
+
+}
+
+
+/* =========================
+   PAGE HEADING
+========================= */
+
+.page-heading {
+
+    margin-bottom: 30px;
+
+}
+
+
+.page-heading h1 {
+
+    font-size: 2rem;
+
+    color: var(--primary-dark);
+
+    font-weight: 700;
+
+    letter-spacing: -.4px;
+
+}
+
+
+/* =========================
+   STUDENT LIST
+========================= */
+
+.student-list {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 20px;
+
+}
+
+
+/* =========================
+   STUDENT CARD
+========================= */
+
+.student-card {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    min-width: 0;
+
+    padding: 18px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    text-decoration: none;
+
+    color: var(--text);
+
+    box-shadow:
+        0 5px 18px rgba(35,48,108,.05);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+
+}
+
+
+.student-card:hover {
+
+    transform: translateY(-4px);
+
+    border-color:
+        rgba(31,66,150,.3);
+
+    box-shadow:
+        0 12px 28px rgba(35,48,108,.12);
+
+}
+
+
+.student-card:active {
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =========================
+   PROFILE PHOTO
+========================= */
+
+.student-photo {
+
+    width: 76px;
+
+    height: 76px;
+
+    flex-shrink: 0;
+
+    object-fit: cover;
+
+    border-radius: 50%;
+
+    background: #E8EDF7;
+
+    border: 3px solid #F0F3F9;
+
+}
+
+
+/* =========================
+   STUDENT INFO
+========================= */
+
+.student-info {
+
+    min-width: 0;
+
+    flex: 1;
+
+}
+
+
+.student-name {
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    line-height: 1.35;
+
+    color: var(--text);
+
+    margin-bottom: 7px;
+
+    word-break: break-word;
+
+}
+
+
+.student-id {
+
+    color: var(--primary);
+
+    font-size: .78rem;
+
+    font-weight: 600;
+
+    letter-spacing: .3px;
+
+}
+
+
+/* =========================
+   LOAD ERROR
+========================= */
+
+.load-error {
+
+    grid-column: 1 / -1;
+
+    padding: 40px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    text-align: center;
+
+    box-shadow:
+        0 5px 18px rgba(35,48,108,.05);
+
+}
+
+
+.load-error h2 {
+
+    color: var(--primary-dark);
+
+    font-size: 1.2rem;
+
+    margin-bottom: 8px;
+
+}
+
+
+.load-error p {
+
+    color: var(--muted);
+
+    font-size: .9rem;
+
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+
+    width: 100%;
+
+    margin-top: auto;
+
+    padding: 45px 20px;
+
+    background: var(--surface);
+
+    border-top: 1px solid var(--border);
+
+    text-align: center;
+
+}
+
+
+.footer-logo {
+
+    width: 230px;
+
+    max-width: 80%;
+
+    height: auto;
+
+    margin-bottom: 18px;
+
+}
+
+
+footer p {
+
+    color: #6B7280;
+
+    font-size: .9rem;
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+    .student-list {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .header-container {
+
+        padding: 16px;
+
+        gap: 14px;
+
+    }
+
+
+    .logo-top {
+
+        width: 54px;
+
+        height: 54px;
+
+    }
+
+
+    .header-title h2 {
+
+        font-size: 1rem;
+
+    }
+
+
+    .header-title p {
+
+        font-size: .8rem;
+
+    }
+
+
+    .back-button {
+
+        padding: 8px 12px;
+
+        font-size: .82rem;
+
+    }
+
+
+    .container {
+
+        padding:
+            35px 16px 55px;
+
+    }
+
+
+    .page-heading {
+
+        margin-bottom: 22px;
+
+    }
+
+
+    .page-heading h1 {
+
+        font-size: 1.6rem;
+
+    }
+
+
+    .student-list {
+
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+
+    }
+
+
+    .student-card {
+
+        padding: 15px;
+
+        gap: 15px;
+
+        border-radius: 14px;
+
+    }
+
+
+    .student-photo {
+
+        width: 68px;
+
+        height: 68px;
+
+    }
+
+
+    .student-name {
+
+        font-size: .95rem;
+
+    }
+
+
+    .student-id {
+
+        font-size: .75rem;
+
+    }
+
+
+    footer {
+
+        padding: 35px 20px;
+
+    }
+
+
+    .footer-logo {
+
+        width: 190px;
+
+    }
+
+}
+
+
+/* =========================
+   VERY SMALL SCREEN
+========================= */
+
+@media (max-width: 380px) {
+
+    .student-card {
+
+        align-items: flex-start;
+
+    }
+
+
+    .student-photo {
+
+        width: 60px;
+
+        height: 60px;
+
+    }
+
+
+    .student-name {
+
+        font-size: .9rem;
+
+    }
+
+}

@@ -1,0 +1,684 @@
+:root {
+
+    --primary: #1F4296;
+    --primary-dark: #23306C;
+
+    --background: #EEF3FF;
+    --surface: #FFFFFF;
+
+    --text: #24324B;
+    --muted: #7B8798;
+
+    --border: #E1E7F0;
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+* {
+
+    margin: 0;
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    font-family: "Inter", sans-serif;
+
+    background: var(--background);
+
+    color: var(--text);
+
+    line-height: 1.6;
+
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-dark)
+        );
+
+    box-shadow:
+        0 4px 20px rgba(0,0,0,.08);
+
+}
+
+
+.header-container {
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 18px 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+}
+
+
+/* =========================
+   HEADER BRAND
+========================= */
+
+.header-brand {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    min-width: 0;
+
+}
+
+
+.logo-top {
+
+    width: 64px;
+
+    height: 64px;
+
+    object-fit: contain;
+
+    flex-shrink: 0;
+
+}
+
+
+.header-title {
+
+    min-width: 0;
+
+}
+
+
+.header-title h2 {
+
+    color: #FFFFFF;
+
+    font-size: 1.15rem;
+
+    font-weight: 700;
+
+    letter-spacing: .4px;
+
+}
+
+
+.header-title p {
+
+    color: rgba(255,255,255,.82);
+
+    font-size: .9rem;
+
+    margin-top: 2px;
+
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+.back-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    flex-shrink: 0;
+
+    padding: 9px 15px;
+
+    background: rgba(255,255,255,.08);
+
+    border: 1px solid rgba(255,255,255,.35);
+
+    border-radius: 10px;
+
+    color: #FFFFFF;
+
+    text-decoration: none;
+
+    font-size: .9rem;
+
+    font-weight: 600;
+
+    transition:
+        background .2s ease,
+        border-color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
+
+}
+
+
+.back-button:hover {
+
+    background: rgba(255,255,255,.16);
+
+    border-color: rgba(255,255,255,.55);
+
+    transform: translateX(-2px);
+
+    box-shadow:
+        0 5px 14px rgba(0,0,0,.12);
+
+}
+
+
+.back-button:active {
+
+    transform: translateX(0);
+
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.container {
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin: auto;
+
+    padding: 50px 20px 70px;
+
+    flex: 1;
+
+}
+
+
+/* =========================
+   PAGE HEADING
+========================= */
+
+.page-heading {
+
+    margin-bottom: 30px;
+
+}
+
+
+.page-heading h1 {
+
+    color: var(--primary-dark);
+
+    font-size: 2rem;
+
+    font-weight: 700;
+
+    letter-spacing: -.4px;
+
+}
+
+
+/* =========================
+   RESEARCH TYPES
+========================= */
+
+.research-types {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+
+}
+
+
+/* =========================
+   SHARED CARD STYLE
+========================= */
+
+.research-type-card,
+.student-generation-card {
+
+    display: block;
+
+    width: 100%;
+
+    padding: 22px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    text-decoration: none;
+
+    color: var(--text);
+
+    box-shadow:
+        0 5px 18px rgba(35,48,108,.05);
+
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+
+}
+
+
+.research-type-card:hover,
+.student-generation-card:hover {
+
+    transform: translateY(-4px);
+
+    border-color:
+        rgba(31,66,150,.3);
+
+    box-shadow:
+        0 12px 28px rgba(35,48,108,.12);
+
+}
+
+
+.research-type-card:active,
+.student-generation-card:active {
+
+    transform: translateY(-1px);
+
+}
+
+
+/* =========================
+   CARD CONTENT
+========================= */
+
+.research-type-content {
+
+    min-width: 0;
+
+}
+
+
+.research-type-content h2 {
+
+    margin: 0 0 8px;
+
+    color: var(--primary-dark);
+
+    font-size: 1.15rem;
+
+    font-weight: 700;
+
+    line-height: 1.4;
+
+    word-break: break-word;
+
+}
+
+
+.research-type-content p {
+
+    margin: 0 0 14px;
+
+    color: var(--muted);
+
+    font-size: .9rem;
+
+    line-height: 1.6;
+
+}
+
+
+.research-count {
+
+    display: inline-block;
+
+    color: var(--primary);
+
+    font-size: .82rem;
+
+    font-weight: 600;
+
+    letter-spacing: .2px;
+
+}
+
+
+/* =========================
+   MURID ANGKATAN CARD
+========================= */
+
+.student-generation-card {
+
+    margin-bottom: 20px;
+
+}
+
+
+.student-generation-card .research-type-content p {
+
+    margin-bottom: 0;
+
+}
+
+
+/* =========================
+   LOAD ERROR
+========================= */
+
+.load-error {
+
+    grid-column: 1 / -1;
+
+    padding: 40px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    text-align: center;
+
+    box-shadow:
+        0 5px 18px rgba(35,48,108,.05);
+
+}
+
+
+.load-error h2 {
+
+    color: var(--primary-dark);
+
+    font-size: 1.2rem;
+
+    margin-bottom: 8px;
+
+}
+
+
+.load-error p {
+
+    color: var(--muted);
+
+    font-size: .9rem;
+
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+
+    width: 100%;
+
+    margin-top: auto;
+
+    padding: 45px 20px;
+
+    background: var(--surface);
+
+    border-top: 1px solid var(--border);
+
+    text-align: center;
+
+}
+
+
+.footer-logo {
+
+    width: 230px;
+
+    max-width: 80%;
+
+    height: auto;
+
+    margin-bottom: 18px;
+
+}
+
+
+footer p {
+
+    color: #6B7280;
+
+    font-size: .9rem;
+
+    line-height: 1.8;
+
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+    .research-types {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .header-container {
+
+        padding: 16px;
+
+        gap: 14px;
+
+    }
+
+
+    .logo-top {
+
+        width: 54px;
+
+        height: 54px;
+
+    }
+
+
+    .header-title h2 {
+
+        font-size: 1rem;
+
+    }
+
+
+    .header-title p {
+
+        font-size: .8rem;
+
+    }
+
+
+    .back-button {
+
+        padding: 8px 12px;
+
+        font-size: .82rem;
+
+    }
+
+
+    .container {
+
+        padding:
+            35px 16px 55px;
+
+    }
+
+
+    .page-heading {
+
+        margin-bottom: 22px;
+
+    }
+
+
+    .page-heading h1 {
+
+        font-size: 1.6rem;
+
+    }
+
+
+    .research-types {
+
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+
+    }
+
+
+    .research-type-card,
+    .student-generation-card {
+
+        padding: 18px;
+
+        border-radius: 14px;
+
+    }
+
+
+    .research-type-content h2 {
+
+        font-size: 1rem;
+
+    }
+
+
+    .research-type-content p {
+
+        font-size: .85rem;
+
+    }
+
+
+    .research-count {
+
+        font-size: .78rem;
+
+    }
+
+
+    footer {
+
+        padding: 35px 20px;
+
+    }
+
+
+    .footer-logo {
+
+        width: 190px;
+
+    }
+
+}
+
+
+/* =========================
+   VERY SMALL SCREEN
+========================= */
+
+@media (max-width: 380px) {
+
+    .header-brand {
+
+        gap: 12px;
+
+    }
+
+
+    .header-title h2 {
+
+        font-size: .9rem;
+
+    }
+
+
+    .header-title p {
+
+        font-size: .75rem;
+
+    }
+
+
+    .back-button {
+
+        padding: 7px 10px;
+
+    }
+
+
+    .research-type-card,
+    .student-generation-card {
+
+        padding: 16px;
+
+    }
+
+
+    .research-type-content h2 {
+
+        font-size: .95rem;
+
+    }
+
+}
