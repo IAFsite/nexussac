@@ -2,18 +2,26 @@
    GENERATION DATA
 ========================= */
 
+const NEXSAC_API =
+    "https://api.db.indoadvfuture.com";
+
+
+/* =========================
+   FETCH GENERATIONS
+========================= */
+
 async function fetchGenerations() {
 
     const response =
         await fetch(
-            "https://raw.githubusercontent.com/IAFsite/nexsac/main/angkatan.json"
+            `${NEXSAC_API}/generations`
         );
 
 
     if (!response.ok) {
 
         throw new Error(
-            `angkatan.json gagal dimuat (${response.status})`
+            `Daftar angkatan gagal dimuat (HTTP ${response.status})`
         );
 
     }

@@ -1,72 +1,162 @@
- /* =========================
-    NEXUS SAC DATA API
- ========================= */
+/* =========================
+   NEXUS SAC DATA API
+========================= */
 
- const NEXSAC_BASE =
-     "https://raw.githubusercontent.com/IAFsite/nexsac/main/data";
-
-
- /* =========================
-    FETCH RESEARCH
- ========================= */
-
- async function fetchResearchByGeneration(
-     generationId,
-     researchType
- ) {
-
-     const response =
-         await fetch(
-             `${NEXSAC_BASE}/${encodeURIComponent(generationId)}.json`
-         );
+const NEXSAC_API =
+    "https://api.db.indoadvfuture.com";
 
 
-     if (!response.ok) {
+/* =========================
+   RESEARCH TYPE META
+========================= */
 
-         throw new Error(
-             `Data angkatan ${generationId} tidak dapat dimuat (HTTP ${response.status}).`
-         );
+const RESEARCH_TYPES = {
 
-     }
+    A: {
+        id: "A",
+        name: "Penelitian A"
+    },
 
+    B: {
+        id: "B",
+        name: "Penelitian B"
+    },
 
-     const data =
-         await response.json();
+    C: {
+        id: "C",
+        name: "Penelitian C"
+    }
 
-
-     const researchList = [];
-
-
-     for (
-         const student
-         of data.students || []
-     ) {
-
-         for (
-             const research
-             of student.research || []
-         ) {
-
-             if (
-                 research.type ===
-                 researchType
-             ) {
-
-                 researchList.push({
-
-                     research,
-
-                     student
-
-                 });
-
-             }
-
-         }
-
-     }
+};
 
 
-     return researchList;
+/* =========================
+   FETCH RESEARCH
+   BY GENERATION
+========================= */
 
- }
+async function fetchResearchByGeneration(
+    generationId,
+    researchType
+) {
+
+    if (!generationId) {
+
+        throw new Error(
+            "Kode angkatan tidak ditemukan."
+        );
+
+    }
+
+
+    /* =========================
+       FETCH RESEARCH
+    ========================= */
+
+    const response =
+        await fetch(
+            `${NEXSAC_API}/research?generation=${encodeURIComponent(
+                generationId
+            )}`
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Data penelitian angkatan ${generationId} tidak dapat dimuat (HTTP ${response.status}).`
+        );
+
+    }
+
+
+    const data =
+        await response.json();
+
+
+    const researchList =
+        Array.isArray(data.research)
+            ? data.research
+            : [];
+
+
+    /* =========================
+       FILTER TYPE
+    ========================= */
+
+    const filteredResearch =
+        researchType
+            ? researchList.filter(
+                item =>
+                    String(item.type)
+                        .toUpperCase() ===
+                    String(researchType)
+                        .toUpperCase()
+            )
+            : researchList;
+
+
+    /* =========================
+       FETCH STUDENTS
+       FOR DISPLAY DATA
+    ========================= */
+
+    const studentsResponse =
+        await fetch(
+            `${NEXSAC_API}/students?generation=${encodeURIComponent(
+                generationId
+            )}`
+        );
+
+
+    if (!studentsResponse.ok) {
+
+        throw new Error(
+            `Data siswa angkatan ${generationId} tidak dapat dimuat (HTTP ${studentsResponse.status}).`
+        );
+
+    }
+
+
+    const studentsData =
+        await studentsResponse.json();
+
+
+    const students =
+        Array.isArray(
+            studentsData.students
+        )
+            ? studentsData.students
+            : [];
+
+
+    /* =========================
+       COMBINE RESEARCH
+       + STUDENT
+    ========================= */
+
+    return filteredResearch.map(
+        research => {
+
+            const student =
+                students.find(
+                    item =>
+                        String(item.id) ===
+                        String(
+                            research.student_id
+                        )
+                ) || null;
+
+
+            return {
+
+                research,
+
+                student
+
+            };
+
+        }
+    );
+
+}

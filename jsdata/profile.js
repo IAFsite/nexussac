@@ -2,12 +2,50 @@
    NEXUS SAC API
 ========================= */
 
-const NEXSAC_BASE =
-    "https://raw.githubusercontent.com/IAFsite/nexsac/main/data";
+const NEXSAC_API =
+    "https://api.db.indoadvfuture.com";
 
 
 const NEXSAC_PROFILE =
     "https://raw.githubusercontent.com/IAFsite/nexsac/main/media/profile-picture";
+
+
+const NEXSAC_DEFAULT_PROFILE =
+    "asset/default-profile";
+
+
+/* =========================
+   FETCH GENERATIONS
+========================= */
+
+async function fetchGenerations() {
+
+    const response =
+        await fetch(
+            `${NEXSAC_API}/generations`
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Daftar angkatan gagal dimuat (HTTP ${response.status}).`
+        );
+
+    }
+
+
+    const database =
+        await response.json();
+
+
+    return Array.isArray(
+        database.generations
+    )
+        ? database.generations
+        : [];
+
+}
 
 
 /* =========================
@@ -27,11 +65,16 @@ async function fetchGeneration(
     }
 
 
+    /* =========================
+       FETCH STUDENTS
+       ONLY THIS GENERATION
+    ========================= */
+
     const response =
         await fetch(
-            `${NEXSAC_BASE}/${encodeURIComponent(
+            `${NEXSAC_API}/students?generation=${encodeURIComponent(
                 generationId
-            )}.json`
+            )}`
         );
 
 
@@ -44,7 +87,58 @@ async function fetchGeneration(
     }
 
 
-    return await response.json();
+    const database =
+        await response.json();
+
+
+    const students =
+        Array.isArray(
+            database.students
+        )
+            ? database.students
+            : [];
+
+
+    /* =========================
+       FETCH GENERATION METADATA
+    ========================= */
+
+    const generations =
+        await fetchGenerations();
+
+
+    const generation =
+        generations.find(
+            item =>
+                String(item.id) ===
+                String(generationId)
+        );
+
+
+    /* =========================
+       RETURN
+       SAME FORMAT AS OLD JSON
+    ========================= */
+
+    return {
+
+        generation:
+            generation || {
+
+                id:
+                    String(generationId),
+
+                name:
+                    `ANGKATAN ${generationId}`,
+
+                description:
+                    `Daftar murid angkatan ${generationId} Sekolah Alam Cikeas.`
+
+            },
+
+        students
+
+    };
 
 }
 
@@ -58,21 +152,186 @@ function getProfilePhoto(
     photo
 ) {
 
-    if (
-        !generationId ||
-        !photo
-    ) {
+    const value =
+        String(
+            photo || ""
+        ).trim();
+
+
+    /* =========================
+       NO PHOTO
+       RETURN EMPTY
+    ========================= */
+
+    if (!value) {
 
         return "";
 
     }
 
 
-    return `${NEXSAC_PROFILE}/${encodeURIComponent(
-        generationId
-    )}/${encodeURIComponent(
-        photo
-    )}`;
+    /* =========================
+       ABSOLUTE URL
+    ========================= */
+
+    if (
+        value.startsWith("http://") ||
+        value.startsWith("https://") ||
+        value.startsWith("//")
+    ) {
+
+        return value;
+
+    }
+
+
+    /* =========================
+       CLEAN FILE NAME
+    ========================= */
+
+    const cleanPath =
+        value
+            .split("?")[0]
+            .split("#")[0];
+
+
+    const fileName =
+        cleanPath
+            .split("/")
+            .filter(Boolean)
+            .pop();
+
+
+    if (!fileName) {
+
+        return "";
+
+    }
+
+
+    /* =========================
+       BUILD PROFILE URL
+    ========================= */
+
+    return (
+        `${NEXSAC_PROFILE}/` +
+        `${encodeURIComponent(generationId)}/` +
+        `${encodeURIComponent(fileName)}`
+    );
+
+}
+
+
+/* =========================
+   DEFAULT PROFILE PHOTO
+========================= */
+
+function getDefaultProfile(
+    studentId
+) {
+
+    const id =
+        String(
+            studentId || ""
+        ).trim();
+
+
+    /*
+     * NEXUS SAC ID
+     *
+     * 07001
+     *     ^^^
+     *     nomor absen
+     *
+     * 09014
+     *     ^^^
+     *     nomor absen
+     */
+
+
+    const attendanceNumber =
+        parseInt(
+            id.slice(-3),
+            10
+        );
+
+
+    /* =========================
+       INVALID ID
+    ========================= */
+
+    if (
+        !Number.isFinite(
+            attendanceNumber
+        ) ||
+        attendanceNumber <= 0
+    ) {
+
+        return (
+            `${NEXSAC_DEFAULT_PROFILE}/1.png`
+        );
+
+    }
+
+
+    /* =========================
+       LOOP 1 - 12
+    ========================= */
+
+    const profileNumber =
+        (
+            (attendanceNumber - 1) %
+            12
+        ) + 1;
+
+
+    /* =========================
+       BUILD DEFAULT URL
+    ========================= */
+
+    return (
+        `${NEXSAC_DEFAULT_PROFILE}/` +
+        `${profileNumber}.png`
+    );
+
+}
+
+
+/* =========================
+   FINAL PROFILE PHOTO
+========================= */
+
+function getStudentPhoto(
+    student,
+    generationId
+) {
+
+    /*
+     * Foto asli terlebih dahulu.
+     */
+
+    const photo =
+        getProfilePhoto(
+            generationId,
+            student?.photo
+        );
+
+
+    if (photo) {
+
+        return photo;
+
+    }
+
+
+    /*
+     * Kalau photo = null,
+     * gunakan default PP.
+     */
+
+    return getDefaultProfile(
+        student?.id
+    );
 
 }
 
@@ -85,61 +344,41 @@ async function findStudentGeneration(
     studentId
 ) {
 
-    const generations = [
-        "00"
-    ];
+    if (!studentId) {
+
+        return null;
+
+    }
 
 
-    for (
-        const generationId
-        of generations
+    const id =
+        String(
+            studentId
+        ).trim();
+
+
+    /* =========================
+       NEXUS SAC ID FORMAT
+
+       09014
+       ^^
+       generation
+    ========================= */
+
+    const generationId =
+        id.substring(
+            0,
+            2
+        );
+
+
+    if (
+        /^\d{2}$/.test(
+            generationId
+        )
     ) {
 
-        try {
-
-            const data =
-                await fetchGeneration(
-                    generationId
-                );
-
-
-            const students =
-                Array.isArray(
-                    data.students
-                )
-                    ? data.students
-                    : [];
-
-
-            const found =
-                students.some(
-                    student =>
-                        String(
-                            student.id
-                        ) ===
-                        String(
-                            studentId
-                        )
-                );
-
-
-            if (found) {
-
-                return generationId;
-
-            }
-
-        }
-
-
-        catch (error) {
-
-            console.warn(
-                `Gagal memeriksa database ${generationId}:`,
-                error
-            );
-
-        }
+        return generationId;
 
     }
 
@@ -188,50 +427,76 @@ async function fetchStudent(
 
 
     /* =========================
-       LOAD DATABASE
+       FETCH STUDENT DIRECTLY
     ========================= */
 
-    const data =
-        await fetchGeneration(
-            resolvedGeneration
+    const response =
+        await fetch(
+            `${NEXSAC_API}/students/${encodeURIComponent(
+                studentId
+            )}`
         );
 
 
-    const students =
-        Array.isArray(
-            data.students
-        )
-            ? data.students
-            : [];
+    if (!response.ok) {
 
+        if (
+            response.status === 404
+        ) {
 
-    /* =========================
-       FIND STUDENT
-    ========================= */
+            throw new Error(
+                `Murid dengan kode "${studentId}" tidak ditemukan.`
+            );
 
-    const studentIndex =
-        students.findIndex(
-            student =>
-                String(
-                    student.id
-                ) ===
-                String(
-                    studentId
-                )
-        );
+        }
 
-
-    if (studentIndex === -1) {
 
         throw new Error(
-            `Murid dengan kode "${studentId}" tidak ditemukan.`
+            `Data murid gagal dimuat (HTTP ${response.status}).`
         );
 
     }
 
 
     const student =
-        students[studentIndex];
+        await response.json();
+
+
+    /* =========================
+       VALIDATE GENERATION
+    ========================= */
+
+    if (
+        student.generation_id &&
+        String(
+            student.generation_id
+        ) !==
+        String(
+            resolvedGeneration
+        )
+    ) {
+
+        throw new Error(
+            `Murid "${studentId}" tidak berada di angkatan ${resolvedGeneration}.`
+        );
+
+    }
+
+
+    /* =========================
+       FETCH GENERATION METADATA
+    ========================= */
+
+    const generations =
+        await fetchGenerations();
+
+
+    const generation =
+        generations.find(
+            item =>
+                String(item.id) ===
+                String(resolvedGeneration)
+        );
 
 
     /* =========================
@@ -239,27 +504,29 @@ async function fetchStudent(
     ========================= */
 
     const photoUrl =
-        getProfilePhoto(
-            resolvedGeneration,
-            student.photo
+        getStudentPhoto(
+            student,
+            resolvedGeneration
         );
 
 
     /* =========================
        RETURN
+       SAME FORMAT AS OLD JS
     ========================= */
 
     return {
 
         student,
 
-        studentIndex,
+        studentIndex:
+            -1,
 
         generationId:
             resolvedGeneration,
 
         generationName:
-            data.generation?.name ||
+            generation?.name ||
             `ANGKATAN ${resolvedGeneration}`,
 
         photoUrl

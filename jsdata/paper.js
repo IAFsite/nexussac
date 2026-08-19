@@ -2,8 +2,8 @@
    NEXUS SAC DATA API
 ========================= */
 
-const NEXSAC_BASE =
-    "https://raw.githubusercontent.com/IAFsite/nexsac/main/data";
+const NEXSAC_API =
+    "https://api.db.indoadvfuture.com";
 
 
 const NEXSAC_MEDIA_BASE =
@@ -37,18 +37,31 @@ async function fetchPaper(
     }
 
 
+    /* =========================
+       FETCH RESEARCH
+    ========================= */
+
     const response =
         await fetch(
-            `${NEXSAC_BASE}/${encodeURIComponent(
-                generationId
-            )}.json`
+            `${NEXSAC_API}/research/${encodeURIComponent(
+                paperId
+            )}`
         );
 
 
     if (!response.ok) {
 
+        if (response.status === 404) {
+
+            throw new Error(
+                `Penelitian dengan kode "${paperId}" tidak ditemukan.`
+            );
+
+        }
+
+
         throw new Error(
-            `Data angkatan ${generationId} gagal dimuat (HTTP ${response.status}).`
+            `Data penelitian gagal dimuat (HTTP ${response.status}).`
         );
 
     }
@@ -59,49 +72,222 @@ async function fetchPaper(
 
 
     /* =========================
-       FIND PAPER
+       NORMALIZE RESPONSE
     ========================= */
 
-    for (
-        const student
-        of database.students || []
+    const paper =
+        database.research ||
+        database.paper ||
+        database;
+
+
+    if (!paper) {
+
+        throw new Error(
+            `Penelitian dengan kode "${paperId}" tidak ditemukan.`
+        );
+
+    }
+
+
+    /* =========================
+       CHECK GENERATION
+    ========================= */
+
+    if (
+        paper.generation_id &&
+        String(paper.generation_id) !==
+        String(generationId)
     ) {
 
-        const researchList =
-            Array.isArray(student.research)
-                ? student.research
-                : [];
+        throw new Error(
+            `Penelitian "${paperId}" bukan bagian dari angkatan ${generationId}.`
+        );
+
+    }
 
 
-        const paper =
-            researchList.find(
-                research =>
-                    String(research.id) ===
-                    String(paperId)
+    /* =========================
+       FETCH STUDENT
+    ========================= */
+
+    let student = null;
+
+
+    const studentId =
+        paper.student_id ||
+        paper.studentId;
+
+
+    if (studentId) {
+
+        const studentResponse =
+            await fetch(
+                `${NEXSAC_API}/students/${encodeURIComponent(
+                    studentId
+                )}`
             );
 
 
-        if (paper) {
+        if (
+            studentResponse.ok
+        ) {
 
-            return {
-
-                paper,
-
-                student,
-
-                generation:
-                    database.generation || {}
-
-            };
+            student =
+                await studentResponse.json();
 
         }
 
     }
 
 
-    throw new Error(
-        `Penelitian dengan kode "${paperId}" tidak ditemukan pada angkatan ${generationId}.`
-    );
+    /* =========================
+       FETCH GENERATION
+    ========================= */
+
+    let generation = null;
+
+
+    const generationResponse =
+        await fetch(
+            `${NEXSAC_API}/generations`
+        );
+
+
+    if (
+        generationResponse.ok
+    ) {
+
+        const generationsDatabase =
+            await generationResponse.json();
+
+
+        const generations =
+            Array.isArray(
+                generationsDatabase.generations
+            )
+                ? generationsDatabase.generations
+                : [];
+
+
+        generation =
+            generations.find(
+                item =>
+                    String(item.id) ===
+                    String(generationId)
+            ) || null;
+
+    }
+
+
+    /* =========================
+       RETURN
+    ========================= */
+
+    return {
+
+        paper,
+
+        student,
+
+        generation:
+            generation || {
+
+                id:
+                    String(generationId),
+
+                name:
+                    `ANGKATAN ${generationId}`,
+
+                description:
+                    ""
+
+            }
+
+    };
+
+}
+
+
+/* =========================
+   FETCH STUDENT RESEARCH
+========================= */
+
+async function fetchStudentResearch(
+    studentId
+) {
+
+    if (!studentId) {
+
+        throw new Error(
+            "ID siswa tidak ditemukan."
+        );
+
+    }
+
+
+    const response =
+        await fetch(
+            `${NEXSAC_API}/students/${encodeURIComponent(
+                studentId
+            )}/research`
+        );
+
+
+    if (!response.ok) {
+
+        if (
+            response.status === 404
+        ) {
+
+            return [];
+
+        }
+
+
+        throw new Error(
+            `Data penelitian siswa gagal dimuat (HTTP ${response.status}).`
+        );
+
+    }
+
+
+    const database =
+        await response.json();
+
+
+    if (
+        Array.isArray(
+            database.research
+        )
+    ) {
+
+        return database.research;
+
+    }
+
+
+    if (
+        Array.isArray(
+            database.papers
+        )
+    ) {
+
+        return database.papers;
+
+    }
+
+
+    if (
+        Array.isArray(database)
+    ) {
+
+        return database;
+
+    }
+
+
+    return [];
 
 }
 
@@ -120,6 +306,10 @@ function getMediaURL(
             filePath || ""
         ).trim();
 
+
+    /* =========================
+       NO FILE
+    ========================= */
 
     if (!value) {
 
@@ -144,7 +334,7 @@ function getMediaURL(
 
 
     /* =========================
-       GET FILE NAME
+       CLEAN PATH
     ========================= */
 
     const cleanPath =
@@ -152,6 +342,10 @@ function getMediaURL(
             .split("?")[0]
             .split("#")[0];
 
+
+    /* =========================
+       GET FILE NAME
+    ========================= */
 
     const fileName =
         cleanPath

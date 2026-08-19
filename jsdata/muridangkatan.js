@@ -2,8 +2,8 @@
    NEXUS SAC DATA API
 ========================= */
 
-const NEXSAC_BASE =
-    "https://raw.githubusercontent.com/IAFsite/nexsac/main/data";
+const NEXSAC_API =
+    "https://api.db.indoadvfuture.com";
 
 
 const NEXSAC_PROFILE_BASE =
@@ -27,24 +27,102 @@ async function fetchGeneration(
     }
 
 
-    const response =
+    /* =========================
+       FETCH STUDENTS
+       ONLY THIS GENERATION
+    ========================= */
+
+    const studentsResponse =
         await fetch(
-            `${NEXSAC_BASE}/${encodeURIComponent(
+            `${NEXSAC_API}/students?generation=${encodeURIComponent(
                 generationId
-            )}.json`
+            )}`
         );
 
 
-    if (!response.ok) {
+    if (!studentsResponse.ok) {
 
         throw new Error(
-            `Data angkatan ${generationId} gagal dimuat (HTTP ${response.status})`
+            `Data angkatan ${generationId} gagal dimuat (HTTP ${studentsResponse.status})`
         );
 
     }
 
 
-    return await response.json();
+    const studentsDatabase =
+        await studentsResponse.json();
+
+
+    const students =
+        Array.isArray(
+            studentsDatabase.students
+        )
+            ? studentsDatabase.students
+            : [];
+
+
+    /* =========================
+       FETCH GENERATION METADATA
+    ========================= */
+
+    const generationResponse =
+        await fetch(
+            `${NEXSAC_API}/generations`
+        );
+
+
+    if (!generationResponse.ok) {
+
+        throw new Error(
+            `Daftar angkatan gagal dimuat (HTTP ${generationResponse.status})`
+        );
+
+    }
+
+
+    const generationsDatabase =
+        await generationResponse.json();
+
+
+    const generations =
+        Array.isArray(
+            generationsDatabase.generations
+        )
+            ? generationsDatabase.generations
+            : [];
+
+
+    const generation =
+        generations.find(
+            item =>
+                String(item.id) ===
+                String(generationId)
+        );
+
+
+    /* =========================
+       RETURN OLD JSON FORMAT
+    ========================= */
+
+    return {
+
+        generation:
+            generation || {
+
+                id:
+                    String(generationId),
+
+                name:
+                    `ANGKATAN ${generationId}`,
+
+                description:
+                    `Daftar murid angkatan ${generationId} Sekolah Alam Cikeas.`
+
+            },
+
+        students
+
+    };
 
 }
 
