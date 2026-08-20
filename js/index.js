@@ -83,16 +83,8 @@ function renderGenerations(
                 "generation-card";
 
 
-            /*
-             * URL BARU
-             *
-             * angkatan/07
-             * angkatan/08
-             * angkatan/09
-             */
-
             card.href =
-                `/angkatan/${encodeURIComponent(
+                `angkatan.html?id=${encodeURIComponent(
                     generation.id
                 )}`;
 
