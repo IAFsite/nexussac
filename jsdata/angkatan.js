@@ -57,7 +57,11 @@ async function fetchGenerationData(
     }
 
 
-    const response =
+    /* =========================
+       FETCH STUDENTS
+    ========================= */
+
+    const studentsResponse =
         await fetch(
             `${NEXSAC_API}/students?generation=${encodeURIComponent(
                 generationId
@@ -65,33 +69,63 @@ async function fetchGenerationData(
         );
 
 
-    if (!response.ok) {
+    if (!studentsResponse.ok) {
 
         throw new Error(
-            `Data angkatan ${generationId} tidak dapat dimuat (HTTP ${response.status}).`
+            `Data angkatan ${generationId} tidak dapat dimuat (HTTP ${studentsResponse.status}).`
         );
 
     }
 
 
-    const database =
-        await response.json();
+    const studentsDatabase =
+        await studentsResponse.json();
 
 
     const students =
         Array.isArray(
-            database.students
+            studentsDatabase.students
         )
-            ? database.students
+            ? studentsDatabase.students
             : [];
 
 
-    /*
-     * Ambil metadata generation dari API.
-     *
-     * Ini membuat format response tetap
-     * kompatibel dengan JSON lama.
-     */
+    /* =========================
+       FETCH RESEARCH
+    ========================= */
+
+    const researchResponse =
+        await fetch(
+            `${NEXSAC_API}/research?generation=${encodeURIComponent(
+                generationId
+            )}`
+        );
+
+
+    if (!researchResponse.ok) {
+
+        throw new Error(
+            `Data penelitian angkatan ${generationId} tidak dapat dimuat (HTTP ${researchResponse.status}).`
+        );
+
+    }
+
+
+    const researchDatabase =
+        await researchResponse.json();
+
+
+    const research =
+        Array.isArray(
+            researchDatabase.research
+        )
+            ? researchDatabase.research
+            : [];
+
+
+    /* =========================
+       FETCH GENERATION METADATA
+    ========================= */
 
     const generations =
         await fetchGenerations();
@@ -104,6 +138,10 @@ async function fetchGenerationData(
                 String(generationId)
         );
 
+
+    /* =========================
+       RESPONSE
+    ========================= */
 
     return {
 
@@ -121,7 +159,9 @@ async function fetchGenerationData(
 
             },
 
-        students
+        students,
+
+        research
 
     };
 

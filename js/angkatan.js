@@ -109,6 +109,14 @@ async function loadGeneration() {
                 : [];
 
 
+        const research =
+            Array.isArray(
+                data.research
+            )
+                ? data.research
+                : [];
+
+
         const displayGeneration =
             generation.name ||
             `ANGKATAN ${generationId}`;
@@ -172,46 +180,39 @@ async function loadGeneration() {
 
 
         for (
-            const student
-            of students
+            const item
+            of research
         ) {
 
-            for (
-                const research
-                of student.research || []
+            const type =
+                item.type;
+
+
+            if (
+                type &&
+                researchTypes[type]
             ) {
 
-                const type =
-                    research.type;
-
-
                 if (
-                    type &&
-                    researchTypes[type]
+                    !availableTypes.has(
+                        type
+                    )
                 ) {
-
-                    if (
-                        !availableTypes.has(
-                            type
-                        )
-                    ) {
-
-                        availableTypes.set(
-                            type,
-                            0
-                        );
-
-                    }
-
 
                     availableTypes.set(
                         type,
-                        availableTypes.get(
-                            type
-                        ) + 1
+                        0
                     );
 
                 }
+
+
+                availableTypes.set(
+                    type,
+                    availableTypes.get(
+                        type
+                    ) + 1
+                );
 
             }
 
@@ -272,12 +273,14 @@ async function loadGeneration() {
 
 
             /*
-             * Flow:
-             *
-             * generation.html?id=09
-             * ↓
-             * penelitian.html?id=09&type=a
-             */
+
+             Flow:
+
+             generation.html?id=09
+                    ↓
+             penelitian.html?id=09&type=a
+
+            */
 
             card.href =
                 `penelitian.html?id=${encodeURIComponent(
