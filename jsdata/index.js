@@ -51,3 +51,41 @@ async function fetchGenerations() {
     return generations;
 
 }
+
+
+/* =========================
+   GENERATION URL
+========================= */
+
+function getGenerationURL(
+    generationId
+) {
+
+    return `/angkatan/${encodeURIComponent(
+        generationId
+    )}`;
+
+}
+
+
+/* =========================
+   GENERATION LINK
+========================= */
+
+function createGenerationLink(
+    generationId
+) {
+
+    const link =
+        document.createElement("a");
+
+
+    link.href =
+        getGenerationURL(
+            generationId
+        );
+
+
+    return link;
+
+}

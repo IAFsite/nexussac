@@ -7,6 +7,54 @@ const NEXSAC_API =
 
 
 /* =========================
+   GET GENERATION ID FROM URL
+========================= */
+
+function getGenerationIdFromURL() {
+
+    const path =
+        window.location.pathname;
+
+
+    /*
+     * URL baru:
+     *
+     * /angkatan/09
+     */
+
+    const match =
+        path.match(
+            /\/angkatan\/([^/]+)/
+        );
+
+
+    if (match) {
+
+        return decodeURIComponent(
+            match[1]
+        );
+
+    }
+
+
+    /*
+     * Fallback URL lama:
+     *
+     * /angkatan.html?id=09
+     */
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    return params.get("id");
+
+}
+
+
+/* =========================
    FETCH GENERATIONS
 ========================= */
 
@@ -165,3 +213,44 @@ async function fetchStudent(
     return await response.json();
 
 }
+
+
+/* =========================
+   CURRENT GENERATION
+========================= */
+
+const generationId =
+    getGenerationIdFromURL();
+
+
+/*
+ * Contoh:
+ *
+ * /angkatan/09
+ *
+ * generationId = "09"
+ *
+ *
+ * Fallback:
+ *
+ * /angkatan.html?id=09
+ *
+ * generationId = "09"
+ */
+
+
+/* =========================
+   OPTIONAL EXPORT
+========================= */
+
+window.NEXSAC = {
+
+    fetchGenerations,
+
+    fetchGenerationData,
+
+    fetchStudent,
+
+    getGenerationIdFromURL
+
+};
