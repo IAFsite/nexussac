@@ -128,6 +128,81 @@ async function fetchGeneration(
 
 
 /* =========================
+   FETCH ALL STUDENTS
+   LAZY / PAGINATED
+========================= */
+
+async function fetchAllStudents(
+    limit = 20,
+    offset = 0
+) {
+
+    const params =
+        new URLSearchParams();
+
+
+    params.set(
+        "limit",
+        String(limit)
+    );
+
+
+    params.set(
+        "offset",
+        String(offset)
+    );
+
+
+    const response =
+        await fetch(
+            `${NEXSAC_API}/students?${params.toString()}`
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Seluruh data murid gagal dimuat (HTTP ${response.status})`
+        );
+
+    }
+
+
+    const database =
+        await response.json();
+
+
+    const students =
+        Array.isArray(
+            database.students
+        )
+            ? database.students
+            : [];
+
+
+    return {
+
+        students,
+
+        pagination:
+            database.pagination || {
+
+                limit,
+
+                offset,
+
+                hasMore:
+                    students.length >=
+                    limit
+
+            }
+
+    };
+
+}
+
+
+/* =========================
    PROFILE PHOTO URL
 ========================= */
 
