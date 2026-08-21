@@ -17,10 +17,13 @@ const paperId =
 ========================= */
 
 /*
+ * Generation sekarang OPTIONAL.
+ *
  * Prioritas:
  *
  * 1. generation dari URL
  * 2. generation dari sessionStorage
+ * 3. generation dari data paper
  */
 
 const generationId =
@@ -45,21 +48,6 @@ async function loadPaper() {
 
         showError(
             "Kode penelitian tidak ditemukan."
-        );
-
-        return;
-
-    }
-
-
-    /* =========================
-       CHECK GENERATION
-    ========================= */
-
-    if (!generationId) {
-
-        showError(
-            "Nomor angkatan tidak ditemukan."
         );
 
         return;
@@ -137,7 +125,11 @@ function renderPaper(
 
         a: "3S3C",
 
-        b: "Laporan"
+        b: "Laporan",
+
+        A: "3S3C",
+
+        B: "Laporan"
 
     };
 
@@ -149,13 +141,17 @@ function renderPaper(
             "Penelitian";
 
 
-        const generationName =
+        const resolvedGeneration =
             generation?.name ||
-            `ANGKATAN ${generationId}`;
+            (
+                generation?.id
+                    ? `ANGKATAN ${generation.id}`
+                    : "NEXUS SAC"
+            );
 
 
         pageTitle.textContent =
-            `${typeName} — ${generationName}`;
+            `${typeName} — ${resolvedGeneration}`;
 
     }
 
@@ -288,7 +284,9 @@ function renderPaper(
 
 
     contentElement.innerHTML =
-        parseMarkdown(content);
+        parseMarkdown(
+            content
+        );
 
 }
 
@@ -402,7 +400,7 @@ function parseInline(text) {
 
     text =
         text.replace(
-            /(?<!\*)\*([^\*]+)\*(?!\*)/g,
+            /(?<!\*)\*([^*]+)\*(?!\*)/g,
             "<em>$1</em>"
         );
 
@@ -621,9 +619,17 @@ function parseMarkdown(
                     .trim();
 
 
+            const resolvedGeneration =
+                generationId ||
+                sessionStorage.getItem(
+                    "paperGeneration"
+                ) ||
+                "";
+
+
             const mediaURL =
                 getMediaURL(
-                    generationId,
+                    resolvedGeneration,
                     src
                 );
 
@@ -669,9 +675,17 @@ function parseMarkdown(
                     .trim();
 
 
+            const resolvedGeneration =
+                generationId ||
+                sessionStorage.getItem(
+                    "paperGeneration"
+                ) ||
+                "";
+
+
             const mediaURL =
                 getMediaURL(
-                    generationId,
+                    resolvedGeneration,
                     src
                 );
 
@@ -882,7 +896,9 @@ function parseMarkdown(
    ERROR
 ========================= */
 
-function showError(message) {
+function showError(
+    message
+) {
 
     const title =
         document.getElementById(

@@ -1249,7 +1249,7 @@ function renderResearch(
 
 
     card.href =
-        `research.html?id=${encodeURIComponent(
+        `paper.html?id=${encodeURIComponent(
             researchId
         )}`;
 

@@ -19,14 +19,9 @@ async function fetchPaper(
     paperId
 ) {
 
-    if (!generationId) {
-
-        throw new Error(
-            "Nomor angkatan tidak ditemukan."
-        );
-
-    }
-
+    /* =========================
+       PAPER ID
+    ========================= */
 
     if (!paperId) {
 
@@ -91,10 +86,46 @@ async function fetchPaper(
 
 
     /* =========================
+       DETERMINE GENERATION
+    ========================= */
+
+    /*
+     * Prioritas:
+     *
+     * 1. generation dari URL
+     * 2. generation dari paper
+     * 3. generation dari sessionStorage
+     */
+
+    let resolvedGenerationId =
+        generationId ||
+        paper.generation_id ||
+        paper.generationId ||
+        sessionStorage.getItem(
+            "paperGeneration"
+        ) ||
+        "";
+
+
+    /*
+     * Kalau tetap tidak ada,
+     * jangan langsung error.
+     *
+     * Paper masih bisa ditampilkan.
+     */
+
+    resolvedGenerationId =
+        String(
+            resolvedGenerationId || ""
+        );
+
+
+    /* =========================
        CHECK GENERATION
     ========================= */
 
     if (
+        generationId &&
         paper.generation_id &&
         String(paper.generation_id) !==
         String(generationId)
@@ -129,12 +160,21 @@ async function fetchPaper(
             );
 
 
-        if (
-            studentResponse.ok
-        ) {
+        if (studentResponse.ok) {
+
+            const studentDatabase =
+                await studentResponse.json();
+
+
+            /*
+             * Support beberapa format
+             * response API.
+             */
 
             student =
-                await studentResponse.json();
+                studentDatabase.student ||
+                studentDatabase.data ||
+                studentDatabase;
 
         }
 
@@ -148,34 +188,75 @@ async function fetchPaper(
     let generation = null;
 
 
-    const generationResponse =
-        await fetch(
-            `${NEXSAC_API}/generations`
-        );
+    if (resolvedGenerationId) {
+
+        try {
+
+            const generationResponse =
+                await fetch(
+                    `${NEXSAC_API}/generations`
+                );
 
 
-    if (
-        generationResponse.ok
-    ) {
+            if (
+                generationResponse.ok
+            ) {
 
-        const generationsDatabase =
-            await generationResponse.json();
-
-
-        const generations =
-            Array.isArray(
-                generationsDatabase.generations
-            )
-                ? generationsDatabase.generations
-                : [];
+                const generationsDatabase =
+                    await generationResponse.json();
 
 
-        generation =
-            generations.find(
-                item =>
-                    String(item.id) ===
-                    String(generationId)
-            ) || null;
+                const generations =
+                    Array.isArray(
+                        generationsDatabase.generations
+                    )
+                        ? generationsDatabase.generations
+                        : [];
+
+
+                generation =
+                    generations.find(
+                        item =>
+                            String(item.id) ===
+                            String(
+                                resolvedGenerationId
+                            )
+                    ) || null;
+
+            }
+
+        } catch (error) {
+
+            console.warn(
+                "Metadata angkatan tidak dapat dimuat.",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       FALLBACK GENERATION
+    ========================= */
+
+    if (!generation) {
+
+        generation = {
+
+            id:
+                resolvedGenerationId,
+
+            name:
+                resolvedGenerationId
+                    ? `ANGKATAN ${resolvedGenerationId}`
+                    : "ANGKATAN",
+
+            description:
+                ""
+
+        };
 
     }
 
@@ -190,19 +271,7 @@ async function fetchPaper(
 
         student,
 
-        generation:
-            generation || {
-
-                id:
-                    String(generationId),
-
-                name:
-                    `ANGKATAN ${generationId}`,
-
-                description:
-                    ""
-
-            }
+        generation
 
     };
 
@@ -367,8 +436,12 @@ function getMediaURL(
 
     return (
         `${NEXSAC_MEDIA_BASE}/` +
-        `${encodeURIComponent(generationId)}/` +
-        `${encodeURIComponent(fileName)}`
+        `${encodeURIComponent(
+            generationId || ""
+        )}/` +
+        `${encodeURIComponent(
+            fileName
+        )}`
     );
 
 }
