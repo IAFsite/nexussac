@@ -42,6 +42,71 @@ let searchRequestId = 0;
 
 
 /* =========================
+   BACK NAVIGATION
+========================= */
+
+function setupBackButton() {
+
+    const backButton =
+        document.getElementById(
+            "back-button"
+        );
+
+    if (!backButton) {
+        return;
+    }
+
+    backButton.addEventListener(
+        "click",
+        function (event) {
+
+            /*
+             * Kalau datang dari halaman
+             * Nexus SAC sendiri:
+             * kembali ke halaman sebelumnya.
+             */
+            if (
+                document.referrer &&
+                document.referrer.startsWith(
+                    window.location.origin
+                )
+            ) {
+
+                event.preventDefault();
+
+                history.back();
+
+                return;
+
+            }
+
+            /*
+             * Kalau masuk langsung:
+             *
+             * QR code
+             * bookmark
+             * direct URL
+             * external link
+             *
+             * href="index.html"
+             * menjadi fallback.
+             */
+
+        }
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+setupBackButton();
+
+loadStudents();
+
+/* =========================
    LOAD STUDENTS
 ========================= */
 

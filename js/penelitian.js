@@ -1569,9 +1569,71 @@ function escapeHTML(
 
 }
 
+/* =========================
+   BACK NAVIGATION
+========================= */
+
+function setupBackButton() {
+
+    const backButton =
+        document.getElementById(
+            "back-button"
+        );
+
+    if (!backButton) {
+        return;
+    }
+
+
+    backButton.addEventListener(
+        "click",
+        function (event) {
+
+            /*
+             * User datang dari halaman
+             * internal Nexus SAC.
+             *
+             * Kembali ke halaman sebelumnya.
+             */
+
+            if (
+                document.referrer &&
+                document.referrer.startsWith(
+                    window.location.origin
+                )
+            ) {
+
+                event.preventDefault();
+
+                history.back();
+
+                return;
+
+            }
+
+
+            /*
+             * Direct access:
+             *
+             * QR code
+             * bookmark
+             * external link
+             * direct URL
+             *
+             * href="index.html"
+             * menjadi fallback.
+             */
+
+        }
+    );
+
+}
+
 
 /* =========================
    START
 ========================= */
+
+setupBackButton();
 
 loadResearch();

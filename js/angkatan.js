@@ -414,6 +414,75 @@ function escapeHTML(
 
 }
 
+/* =========================
+   BACK NAVIGATION
+========================= */
+
+function setupBackButton() {
+
+    const backButton =
+        document.getElementById(
+            "back-button"
+        );
+
+    if (!backButton) {
+        return;
+    }
+
+
+    backButton.addEventListener(
+        "click",
+        function (event) {
+
+            /*
+             * User datang dari dalam
+             * Nexus SAC.
+             *
+             * Kembali ke halaman sebelumnya.
+             */
+
+            if (
+                document.referrer &&
+                document.referrer.startsWith(
+                    window.location.origin
+                )
+            ) {
+
+                event.preventDefault();
+
+                history.back();
+
+                return;
+
+            }
+
+
+            /*
+             * Tidak ada referrer internal.
+             *
+             * Kemungkinan:
+             * - QR code
+             * - bookmark
+             * - direct URL
+             * - external link
+             *
+             * Biarkan href="index.html"
+             * menjadi fallback.
+             */
+
+        }
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+setupBackButton();
+
+loadGeneration();
 
 /* =========================
    START

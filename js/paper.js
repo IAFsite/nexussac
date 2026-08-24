@@ -35,6 +35,69 @@ const generationId =
 
 
 /* =========================
+   BACK NAVIGATION
+========================= */
+
+function setupBackButton() {
+
+    const backButton =
+        document.getElementById(
+            "back-button"
+        );
+
+    if (!backButton) {
+        return;
+    }
+
+    backButton.addEventListener(
+        "click",
+        function (event) {
+
+            /*
+             * Kalau user datang dari halaman
+             * Nexus SAC sendiri, kembali ke sana.
+             */
+            if (
+                document.referrer &&
+                document.referrer.startsWith(
+                    window.location.origin
+                )
+            ) {
+
+                event.preventDefault();
+
+                history.back();
+
+                return;
+            }
+
+            /*
+             * Kalau tidak ada referrer internal:
+             *
+             * QR code
+             * bookmark
+             * link eksternal
+             * direct URL
+             *
+             * Biarkan href="index.html"
+             * bekerja sebagai fallback.
+             */
+
+        }
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+setupBackButton();
+
+loadPaper();
+
+/* =========================
    LOAD PAPER
 ========================= */
 

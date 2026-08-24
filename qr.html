@@ -1,0 +1,601 @@
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=1280, initial-scale=1.0">
+
+    <title>NEXUS SAC | Penelitian 3S3C 2026</title>
+
+
+    <style>
+
+        /* =========================
+           COLOR PALETTE
+        ========================= */
+
+        :root {
+
+            --primary: #1F4296;
+            --primary-dark: #23306C;
+
+            --background: #EEF3FF;
+            --surface: #FFFFFF;
+
+            --text: #24324B;
+            --muted: #7B8798;
+
+            --border: #E1E7F0;
+
+        }
+
+
+        /* =========================
+           RESET
+        ========================= */
+
+        * {
+
+            margin: 0;
+            padding: 0;
+
+            box-sizing: border-box;
+
+        }
+
+
+        /* =========================
+           BODY
+        ========================= */
+
+        html,
+        body {
+
+            width: 100%;
+            height: 100%;
+
+        }
+
+
+        body {
+
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #dfe5f2;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+
+        }
+
+
+        /* =========================
+           CANVAS
+           1280 × 720
+           16 : 9
+        ========================= */
+
+        .canvas {
+
+            width: 1280px;
+            height: 720px;
+
+            position: relative;
+
+            background: var(--background);
+
+            overflow: hidden;
+
+        }
+
+
+        /* =========================
+           TOP BAR
+        ========================= */
+
+        .top-bar {
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 8px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--primary),
+                    var(--primary-dark)
+                );
+
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+
+            position: absolute;
+
+            top: 42px;
+            left: 65px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 17px;
+
+        }
+
+
+        .logo {
+
+            width: 62px;
+            height: 62px;
+
+            object-fit: contain;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .header-title h2 {
+
+            color: var(--primary-dark);
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            letter-spacing: .3px;
+
+        }
+
+
+        .header-title p {
+
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+        }
+
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .content {
+
+            position: absolute;
+
+            top: 145px;
+
+            left: 65px;
+            right: 65px;
+
+            bottom: 45px;
+
+            display: grid;
+
+            grid-template-columns:
+                1fr
+                480px;
+
+            gap: 70px;
+
+        }
+
+
+        /* =========================
+           LEFT
+        ========================= */
+
+        .left {
+
+            display: flex;
+
+            flex-direction: column;
+
+            min-width: 0;
+
+        }
+
+
+        /* =========================
+           PAGE HEADING
+        ========================= */
+
+        .page-heading {
+
+            margin-top: 25px;
+
+        }
+
+
+        .page-heading h1 {
+
+            color: var(--primary-dark);
+
+            font-size: 48px;
+
+            font-weight: 700;
+
+            line-height: 1.08;
+
+            letter-spacing: -1.5px;
+
+        }
+
+
+        .page-heading h1 span {
+
+            color: var(--primary);
+
+        }
+
+
+        .page-heading p {
+
+            max-width: 510px;
+
+            margin-top: 15px;
+
+            color: var(--muted);
+
+            font-size: 16px;
+
+            line-height: 1.65;
+
+        }
+
+
+        /* =========================
+           QR GUIDE
+        ========================= */
+
+        .guide {
+
+            margin-top: auto;
+
+        }
+
+
+        .guide-title {
+
+            margin-bottom: 10px;
+
+            color: var(--primary-dark);
+
+            font-size: 15px;
+
+            font-weight: 700;
+
+        }
+
+
+        /*
+            TEMPORARY PLACEHOLDER
+
+            Nanti bisa diganti langsung:
+
+            <img
+                src="assets/qr-guide.png"
+                class="guide-image"
+            >
+        */
+
+        .guide-image {
+
+            width: 540px;
+            height: 165px;
+
+            background: var(--surface);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 16px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+        }
+
+
+        /* =========================
+           RIGHT
+        ========================= */
+
+        .right {
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+        }
+
+
+        /* =========================
+           QR CARD
+        ========================= */
+
+        .qr-card {
+
+            width: 450px;
+            height: 510px;
+
+            padding: 25px;
+
+            background: var(--surface);
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(35, 48, 108, .07);
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+
+        /* =========================
+           QR
+        ========================= */
+
+        .qr {
+
+            width: 390px;
+            height: 390px;
+
+            object-fit: contain;
+
+            display: block;
+
+        }
+
+
+        /* =========================
+           QR LABEL
+        ========================= */
+
+        .qr-label {
+
+            margin-top: 15px;
+
+            color: var(--muted);
+
+            font-size: 14px;
+
+            font-weight: 500;
+
+            text-align: center;
+
+        }
+
+
+        /* =========================
+           RESPONSIVE PREVIEW
+        ========================= */
+
+        @media (
+            max-width: 1280px
+        ),
+        (
+            max-height: 720px
+        ) {
+
+            .canvas {
+
+                transform-origin:
+                    center center;
+
+                transform:
+                    scale(
+                        min(
+                            calc(100vw / 1280),
+                            calc(100vh / 720)
+                        )
+                    );
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<main class="canvas">
+
+
+    <div class="top-bar"></div>
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header class="header">
+
+
+        <img
+            src="asset/logo/image.png"
+            class="logo"
+            alt="Sekolah Alam Cikeas">
+
+
+        <div class="header-title">
+
+            <h2>NEXUS SAC</h2>
+
+            <p>
+                SMA Sekolah Alam Cikeas
+            </p>
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- =========================
+         CONTENT
+    ========================= -->
+
+    <section class="content">
+
+
+        <!-- =====================
+             LEFT
+        ====================== -->
+
+        <div class="left">
+
+
+            <section class="page-heading">
+
+                <h1>
+                    Penelitian
+                    <span>3S3C 2026</span>
+                </h1>
+
+                <p>
+                    Jelajahi penelitian siswa
+                    SMA Sekolah Alam Cikeas
+                    melalui NEXUS SAC.
+                </p>
+
+            </section>
+
+
+
+            <!-- =====================
+                 QR GUIDE
+            ====================== -->
+
+            <section class="guide">
+
+                <div class="guide-title">
+
+                    Cara menggunakan QR Code
+
+                </div>
+
+
+                <!--
+
+                    NANTI GANTI DENGAN
+                    ILUSTRASI BUATAN LU:
+
+                    <img
+                        src="assets/qr-guide.png"
+                        class="guide-image"
+                        alt="Cara menggunakan QR Code"
+                    >
+
+                -->
+
+                <div class="guide-image">
+
+                    <img
+                    src="ilustrasi.png"
+                    alt="QR Code Penelitian 3S3C 2026">
+
+                </div>
+
+
+            </section>
+
+
+        </div>
+
+
+
+        <!-- =====================
+             RIGHT
+        ====================== -->
+
+        <div class="right">
+
+
+            <div class="qr-card">
+
+
+                <!--
+                    GANTI DENGAN
+                    QR CODE ASLI
+                -->
+
+                <img
+                    src="qr-code.png"
+                    class="qr"
+                    alt="QR Code Penelitian 3S3C 2026">
+
+
+                <div class="qr-label">
+
+                    Scan untuk melihat penelitian
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+</body>
+
+</html>
+```

@@ -543,6 +543,68 @@ function escapeHTML(
 
 
 /* =========================
+   BACK BUTTON
+========================= */
+
+function initializeBackButton() {
+
+    const backButton =
+        document.getElementById(
+            "back-button"
+        );
+
+
+    if (!backButton)
+        return;
+
+
+    /*
+     * Kalau halaman ini dibuka
+     * dari halaman lain dalam website,
+     * gunakan history.back().
+     *
+     * Kalau tidak ada history yang
+     * relevan, langsung ke index.html.
+     */
+
+    backButton.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+
+            if (
+                window.history.length > 1 &&
+                document.referrer
+            ) {
+
+                window.history.back();
+
+            }
+
+            else {
+
+                window.location.href =
+                    "index.html";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+initializeBackButton();
+
+loadProfile();
+
+/* =========================
    START
 ========================= */
 
