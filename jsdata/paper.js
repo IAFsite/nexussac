@@ -409,25 +409,45 @@ function getMediaURL(
     const cleanPath =
         value
             .split("?")[0]
-            .split("#")[0];
+            .split("#")[0]
+            .replace(/^\/+/, "")
+            .replace(/\/+$/, "");
 
 
-    /* =========================
-       GET FILE NAME
-    ========================= */
-
-    const fileName =
-        cleanPath
-            .split("/")
-            .filter(Boolean)
-            .pop();
-
-
-    if (!fileName) {
+    if (!cleanPath) {
 
         return "";
 
     }
+
+
+    /* =========================
+       ENCODE PATH
+    ========================= */
+
+    /*
+     * Encode setiap bagian path
+     * secara terpisah agar tanda "/"
+     * tetap menjadi separator folder.
+     *
+     * Contoh:
+     *
+     * 09/bevanramon/foto.png
+     *
+     * menjadi:
+     *
+     * 09/bevanramon/foto.png
+     */
+
+    const encodedPath =
+        cleanPath
+            .split("/")
+            .filter(Boolean)
+            .map(
+                part =>
+                    encodeURIComponent(part)
+            )
+            .join("/");
 
 
     /* =========================
@@ -436,12 +456,7 @@ function getMediaURL(
 
     return (
         `${NEXSAC_MEDIA_BASE}/` +
-        `${encodeURIComponent(
-            generationId || ""
-        )}/` +
-        `${encodeURIComponent(
-            fileName
-        )}`
+        `${encodedPath}`
     );
 
 }

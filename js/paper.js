@@ -586,7 +586,7 @@ function parseMarkdown(
         ========================= */
 
         if (
-            line.startsWith("## ")
+            line.startsWith("#h2 ")
         ) {
 
             closeList();
@@ -595,7 +595,7 @@ function parseMarkdown(
             const value =
                 line
                     .replace(
-                        /^##\s*/,
+                        /^#h2\s*/,
                         ""
                     )
                     .trim();

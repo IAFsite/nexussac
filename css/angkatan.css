@@ -491,6 +491,22 @@ footer p {
 
 }
 
+.footer-iaf-logo{
+
+    display:block;
+
+    width:150px;
+
+    max-width:100%;
+
+    height:auto;
+
+    margin:20px auto 0;
+
+    opacity: 20%;
+
+}
+
 
 /* =========================
    TABLET

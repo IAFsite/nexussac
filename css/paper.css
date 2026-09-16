@@ -1,12 +1,15 @@
 :root{
 
     --primary:#1F4296;
+
     --primary-dark:#23306C;
 
     --background:#EEF3FF;
+
     --surface:#FFFFFF;
 
     --text:#24324B;
+
     --muted:#7B8798;
 
     --border:#E2EAF5;
@@ -23,6 +26,7 @@
 *{
 
     margin:0;
+
     padding:0;
 
     box-sizing:border-box;
@@ -54,7 +58,7 @@ body{
    HEADER
 ========================= */
 
-header {
+header{
 
     background:
         linear-gradient(
@@ -69,75 +73,76 @@ header {
 }
 
 
-.header-container {
+.header-container{
 
-    max-width: 1100px;
+    max-width:1100px;
 
-    margin: auto;
+    margin:auto;
 
-    padding: 18px 20px;
+    padding:18px 20px;
 
-    display: flex;
+    display:flex;
 
-    align-items: center;
+    align-items:center;
 
-    justify-content: space-between;
+    justify-content:space-between;
 
-    gap: 20px;
-
-}
-
-
-.header-brand {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 18px;
-
-    min-width: 0;
+    gap:20px;
 
 }
 
 
-.logo-top {
+.header-brand{
 
-    width: 64px;
-    height: 64px;
+    display:flex;
 
-    object-fit: contain;
+    align-items:center;
 
-    flex-shrink: 0;
+    gap:18px;
 
-}
-
-
-.header-title {
-
-    min-width: 0;
+    min-width:0;
 
 }
 
 
-.header-title h2 {
+.logo-top{
 
-    color: white;
+    width:64px;
 
-    font-size: 1.15rem;
+    height:64px;
 
-    font-weight: 700;
+    object-fit:contain;
+
+    flex-shrink:0;
 
 }
 
 
-.header-title p {
+.header-title{
 
-    color: rgba(255,255,255,.82);
+    min-width:0;
 
-    font-size: .9rem;
+}
 
-    margin-top: 2px;
+
+.header-title h2{
+
+    color:white;
+
+    font-size:1.15rem;
+
+    font-weight:700;
+
+}
+
+
+.header-title p{
+
+    color:rgba(255,255,255,.82);
+
+    font-size:.9rem;
+
+    margin-top:2px;
 
 }
 
@@ -146,42 +151,44 @@ header {
    BACK
 ========================= */
 
-.back-button {
+.back-button{
 
-    display: inline-flex;
+    display:inline-flex;
 
-    align-items: center;
+    align-items:center;
 
-    flex-shrink: 0;
+    flex-shrink:0;
 
-    padding: 9px 15px;
+    padding:9px 15px;
 
-    background: rgba(255,255,255,.08);
+    background:rgba(255,255,255,.08);
 
-    border: 1px solid rgba(255,255,255,.35);
+    border:1px solid rgba(255,255,255,.35);
 
-    border-radius: 10px;
+    border-radius:10px;
 
-    color: white;
+    color:white;
 
-    text-decoration: none;
+    text-decoration:none;
 
-    font-size: .9rem;
+    font-size:.9rem;
 
-    font-weight: 600;
+    font-weight:600;
 
-    transition: .2s ease;
+    transition:.2s ease;
+
+}
+
+
+.back-button:hover{
+
+    background:rgba(255,255,255,.16);
+
+    transform:translateX(-2px);
 
 }
 
 
-.back-button:hover {
-
-    background: rgba(255,255,255,.16);
-
-    transform: translateX(-2px);
-
-}
 /* ==========================
    MAIN CONTAINER
 ========================== */
@@ -199,9 +206,9 @@ header {
 }
 
 
-/* ==========================
+/* =========================
    PAPER
-========================== */
+========================= */
 
 .paper{
 
@@ -221,9 +228,9 @@ header {
 }
 
 
-/* ==========================
+/* =========================
    PAPER TITLE
-========================== */
+========================= */
 
 .paper-title{
 
@@ -306,9 +313,9 @@ header {
 }
 
 
-/* ==========================
+/* =========================
    SEPARATOR
-========================== */
+========================= */
 
 hr{
 
@@ -336,9 +343,9 @@ hr{
 }
 
 
-/* ==========================
+/* =========================
    PARAGRAPH
-========================== */
+========================= */
 
 .paper-content p{
 
@@ -360,9 +367,9 @@ hr{
 }
 
 
-/* ==========================
+/* =========================
    H1
-========================== */
+========================= */
 
 .paper-content h1{
 
@@ -379,9 +386,9 @@ hr{
 }
 
 
-/* ==========================
+/* =========================
    H2
-========================== */
+========================= */
 
 .paper-content h2{
 
@@ -398,9 +405,9 @@ hr{
 }
 
 
-/* ==========================
+/* =========================
    H3
-========================== */
+========================= */
 
 .paper-content h3{
 
@@ -417,9 +424,9 @@ hr{
 }
 
 
-/* ==========================
+/* =========================
    INLINE
-========================== */
+========================= */
 
 .paper-content strong{
 
@@ -468,22 +475,35 @@ hr{
 }
 
 
-/* ==========================
+/* =========================
    IMAGE
-========================== */
+========================= */
 
 /*
-   Maximum width:
-   700px
-
-   Height:
-   mengikuti ukuran asli
-
    Small image:
-   tidak diperbesar
+   tetap menggunakan ukuran asli.
 
    Large image:
-   tidak overflow
+   otomatis mengecil jika melebihi
+   lebar area konten.
+
+   Tidak overflow.
+
+   Margin kecil.
+*/
+
+/* =========================
+   IMAGE
+========================= */
+
+/*
+   Semua gambar:
+   - Mengikuti lebar area konten
+   - Foto kecil ikut diperbesar
+   - Foto besar otomatis diperkecil
+   - Aspect ratio tetap
+   - Tidak overflow
+   - Margin vertikal kecil
 */
 
 .paper-image{
@@ -492,9 +512,9 @@ hr{
 
     width:100%;
 
-    max-width:700px;
+    max-width:100%;
 
-    margin:25px auto;
+    margin:18px auto;
 
 }
 
@@ -503,13 +523,13 @@ hr{
 
     display:block;
 
-    width:auto;
+    width:100%;
 
     max-width:100%;
 
     height:auto;
 
-    margin:0 auto;
+    margin:0;
 
     border-radius:12px;
 
@@ -519,9 +539,10 @@ hr{
 }
 
 
-/* ==========================
+
+/* =========================
    VIDEO
-========================== */
+========================= */
 
 .paper-video{
 
@@ -529,9 +550,11 @@ hr{
 
     width:100%;
 
-    max-width:700px;
+    max-width:100%;
 
-    margin:25px auto;
+    margin:18px auto;
+
+    overflow:hidden;
 
 }
 
@@ -558,9 +581,9 @@ hr{
 }
 
 
-/* ==========================
+/* =========================
    FILE / DOWNLOAD
-========================== */
+========================= */
 
 .paper-content .edu-file{
 
@@ -635,9 +658,9 @@ hr{
 }
 
 
-/* ==========================
+/* =========================
    BLOCKQUOTE
-========================== */
+========================= */
 
 .paper-content blockquote{
 
@@ -657,9 +680,9 @@ hr{
 }
 
 
-/* ==========================
+/* =========================
    LIST
-========================== */
+========================= */
 
 .paper-content ul,
 .paper-content ol{
@@ -679,9 +702,9 @@ hr{
 }
 
 
-/* ==========================
+/* =========================
    LINKS
-========================== */
+========================= */
 
 .paper-content a{
 
@@ -699,9 +722,9 @@ hr{
 }
 
 
-/* ==========================
+/* =========================
    FOOTER
-========================== */
+========================= */
 
 footer{
 
@@ -745,10 +768,25 @@ footer p{
 
 }
 
+.footer-iaf-logo{
 
-/* ==========================
+    display:block;
+
+    width:150px;
+
+    max-width:100%;
+
+    height:auto;
+
+    margin:20px auto 0;
+
+    opacity: 20%;
+
+}
+
+/* =========================
    ERROR
-========================== */
+========================= */
 
 .error-message{
 
@@ -759,50 +797,94 @@ footer p{
 }
 
 
-/* ==========================
+/* =========================
    MOBILE
-========================== */
+========================= */
 
-@media (max-width: 700px) {
+@media (max-width:700px){
 
-    .header-container {
+    .header-container{
 
-        padding: 16px;
+        padding:16px;
 
-        gap: 14px;
-
-    }
-
-
-    .logo-top {
-
-        width: 54px;
-        height: 54px;
+        gap:14px;
 
     }
 
 
-    .header-title h2 {
+    .logo-top{
 
-        font-size: 1rem;
+        width:54px;
 
-    }
-
-
-    .header-title p {
-
-        font-size: .8rem;
+        height:54px;
 
     }
 
 
-    .back-button {
+    .header-title h2{
 
-        padding: 8px 12px;
-
-        font-size: .82rem;
+        font-size:1rem;
 
     }
 
+
+    .header-title p{
+
+        font-size:.8rem;
+
+    }
+
+
+    .back-button{
+
+        padding:8px 12px;
+
+        font-size:.82rem;
+
+    }
+
+
+    .container{
+
+        padding:25px 12px;
+
+    }
+
+
+    .paper{
+
+        padding:25px 18px;
+
+        border-radius:14px;
+
+    }
+
+
+    .paper-title{
+
+        font-size:1.6rem;
+
+    }
+
+
+    .metadata{
+
+        gap:20px;
+
+    }
+
+
+    .paper-image{
+
+        margin:12px auto;
+
+    }
+
+
+    .paper-video{
+
+        margin:12px auto;
+
+    }
 
 }

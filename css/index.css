@@ -461,11 +461,15 @@ footer {
 
 .footer-logo {
 
+    display: block;
+
     width: 230px;
 
     max-width: 80%;
 
-    margin-bottom: 18px;
+    height: auto;
+
+    margin: 0 auto 18px;
 
 }
 
@@ -477,6 +481,29 @@ footer p {
     font-size: .9rem;
 
     line-height: 1.8;
+
+}
+
+
+/* =========================
+   IAF FOOTER LOGO
+========================= */
+
+.footer-iaf-logo {
+
+    display: block;
+
+    width: 150px;
+
+    max-width: 60%;
+
+    height: auto;
+
+    margin: 20px auto 0;
+
+    opacity: .2;
+
+    object-fit: contain;
 
 }
 
@@ -644,5 +671,22 @@ footer p {
         width: 190px;
 
     }
+
+
+    .footer-iaf-logo{
+
+    display:block;
+
+    width:150px;
+
+    max-width:100%;
+
+    height:auto;
+
+    margin:20px auto 0;
+
+    opacity: 20%;
+
+}
 
 }
