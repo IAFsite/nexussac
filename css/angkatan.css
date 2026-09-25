@@ -13,6 +13,10 @@
 
 }
 
+    #nexus-version {
+        color: inherit !important;
+        text-decoration: none;
+    }
 
 /* =========================
    RESET

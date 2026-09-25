@@ -1,0 +1,227 @@
+{
+  "current_version": "2.7.0",
+  "versions": [
+        {
+      "version": "2.7.0",
+      "date": "2026-09-25",
+      "title": "Remove Cluter",
+      "changes": [
+        "Menambahkan filter agar profile yang tidak memiliki penelitan tidak di tampilkan",
+        "Menambahkan filter agar angkatan yang tidak memiliki penelitian tidak di tampilkan",
+        "menambahkan nomor versi di bawah setiap halaman"
+      ]
+    },
+    {
+      "version": "2.6.1",
+      "date": "2026-09-15",
+      "title": "Interface Cleanup & Login Preparation",
+      "changes": [
+        "Memperbaiki halaman 404 karena herf dan fetch logo mengunakan relative phat kini sudah menggunakan link"
+      ]
+    },
+    {
+      "version": "2.6.0",
+      "date": "2026-09-15",
+      "title": "Interface Cleanup & Login Preparation",
+      "changes": [
+        "Menambahkan halaman 404 yang proper dan sesuai style nexsac"
+      ]
+    },    
+    {
+      "version": "2.5.0",
+      "date": "2026-09-16",
+      "title": "Interface Cleanup & Login Preparation",
+      "changes": [
+        "Menambahkan logo IAF pada footer seluruh halaman",
+        "Cleanup dan perapihan CSS",
+        "Perapihan khusus pada paper.css",
+        "Memperbarui format heading Markdown dari ## menjadi #h2",
+        "Meningkatkan encoding path media",
+        "Melakukan persiapan struktur untuk sistem login NEXUS SAC"
+      ]
+    },
+    {
+      "version": "2.4.0",
+      "date": "2026-09-16",
+      "title": "Interface Cleanup & Login Preparation",
+      "changes": [
+        "Menambahkan logo IAF pada footer seluruh halaman",
+        "Cleanup dan perapihan CSS",
+        "Perapihan khusus pada paper.css",
+        "Memperbarui format heading Markdown dari ## menjadi #h2",
+        "Meningkatkan encoding path media",
+        "Melakukan persiapan struktur untuk sistem login NEXUS SAC"
+      ]
+    },
+    {
+      "version": "2.3.0",
+      "date": "2026-08-25",
+      "title": "Navigation Update",
+      "changes": [
+        "Menambahkan tombol Kembali yang lebih adaptif",
+        "Jika halaman dibuka dari dalam website, tombol menggunakan history.back()",
+        "Jika halaman dibuka langsung melalui QR, bookmark, atau link eksternal, tombol menggunakan index.html sebagai fallback",
+        "Perbaikan navigasi pada berbagai halaman"
+      ]
+    },
+    {
+      "version": "2.2.1",
+      "date": "2026-08-21",
+      "title": "Bug Fixes & Media Improvements",
+      "changes": [
+        "Perbaikan beberapa bug kecil",
+        "Parameter generation pada halaman paper dibuat optional",
+        "Perbaikan encoding path media",
+        "Penyesuaian beberapa bagian sistem"
+      ]
+    },
+    {
+      "version": "2.2.0",
+      "date": "2026-08-21",
+      "title": "Search & Quick Access",
+      "changes": [
+        "Menambahkan fitur Search pada halaman All Student dan All Research",
+        "Menambahkan lazy loading",
+        "Menambahkan pagination",
+        "Menambahkan Quick Access pada homepage",
+        "Menambahkan akses All Student dan All Files",
+        "Perbaikan tampilan homepage"
+      ]
+    },
+    {
+      "version": "2.1.1",
+      "date": "2026-08-20",
+      "title": "Maintenance Update",
+      "changes": [
+        "Perbaikan dan sinkronisasi internal project"
+      ]
+    },
+    {
+      "version": "2.1.0",
+      "date": "2026-08-20",
+      "title": "Full API Integration",
+      "changes": [
+        "API database sudah terintegrasi secara penuh",
+        "Fetch data angkatan berhasil",
+        "Fetch data siswa berhasil",
+        "Fetch data penelitian berhasil",
+        "Fetch media berhasil",
+        "NEXUS SAC mulai sepenuhnya menggunakan sistem API"
+      ]
+    },
+    {
+      "version": "2.0.8",
+      "date": "2026-08-20",
+      "title": "Domain Configuration",
+      "changes": [
+        "Penyesuaian konfigurasi custom domain"
+      ]
+    },
+    {
+      "version": "2.0.7",
+      "date": "2026-08-20",
+      "title": "Re-upload & Fixes",
+      "changes": [
+        "Upload ulang beberapa file setelah proses perbaikan",
+        "Penyesuaian struktur project"
+      ]
+    },
+    {
+      "version": "2.0.6",
+      "date": "2026-08-20",
+      "title": "Maintenance Update",
+      "changes": [
+        "Perbaikan dan sinkronisasi internal project"
+      ]
+    },
+    {
+      "version": "2.0.5",
+      "date": "2026-08-20",
+      "title": "Bug Fixes",
+      "changes": [
+        "Perbaikan bug dan masalah pada sistem",
+        "Penyesuaian beberapa bagian website agar lebih stabil"
+      ]
+    },
+    {
+      "version": "2.0.4",
+      "date": "2026-08-20",
+      "title": "Index Update",
+      "changes": [
+        "Memperbarui logic pada halaman utama",
+        "Penyesuaian sistem pengambilan dan pemrosesan data"
+      ]
+    },
+    {
+      "version": "2.0.3",
+      "date": "2026-08-20",
+      "title": "URL Rollback",
+      "changes": [
+        "Mengembalikan konfigurasi URL yang mengalami masalah"
+      ]
+    },
+    {
+      "version": "2.0.2",
+      "date": "2026-08-20",
+      "title": "API & Media URL Update",
+      "changes": [
+        "Pengujian URL API dan media baru",
+        "Penyesuaian sistem terhadap struktur URL yang diperbarui"
+      ]
+    },
+    {
+      "version": "2.0.1",
+      "date": "2026-08-19",
+      "title": "Maintenance Update",
+      "changes": [
+        "Perbaikan dan penyesuaian internal setelah migrasi API"
+      ]
+    },
+    {
+      "version": "2.0.0",
+      "date": "2026-08-19",
+      "title": "Database API Migration",
+      "changes": [
+        "Migrasi dari data JSON statis ke API database",
+        "Data angkatan, siswa, dan penelitian mulai diambil melalui API",
+        "Mengubah arsitektur utama NEXUS SAC menjadi berbasis API"
+      ]
+    },
+    {
+      "version": "1.0.3",
+      "date": "2026-08-18",
+      "title": "Custom Domain Setup",
+      "changes": [
+        "Membuat ulang konfigurasi custom domain"
+      ]
+    },
+    {
+      "version": "1.0.2",
+      "date": "2026-08-18",
+      "title": "Domain Configuration",
+      "changes": [
+        "Menghapus konfigurasi custom domain sementara"
+      ]
+    },
+    {
+      "version": "1.0.1",
+      "date": "2026-08-18",
+      "title": "Custom Domain Setup",
+      "changes": [
+        "Menambahkan konfigurasi custom domain untuk GitHub Pages"
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "date": "2026-08-18",
+      "title": "Initial Release",
+      "changes": [
+        "Rilis pertama website NEXUS SAC",
+        "Menambahkan halaman utama, angkatan, murid, penelitian, paper, dan profile",
+        "Menggunakan data statis berbasis JSON lokal",
+        "Menambahkan CSS dan JavaScript dasar",
+        "Menambahkan Manifest dan Service Worker sederhana"
+      ]
+    }
+  ]
+}

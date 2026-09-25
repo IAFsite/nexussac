@@ -13,11 +13,6 @@
 
 }
 
-    #nexus-version {
-        color: inherit !important;
-        text-decoration: none;
-    }
-
 
 * {
 
@@ -46,7 +41,6 @@ body {
     font-family: "Inter", sans-serif;
 
     background: var(--background);
-
     color: var(--text);
 
     line-height: 1.6;
@@ -229,89 +223,76 @@ header {
 }
 
 
-/* =========================
-   TABS
-========================= */
-
-.research-tabs {
-
-    display: flex;
-
-    gap: 10px;
-
-    flex-wrap: wrap;
-
-    margin-bottom: 25px;
-
-}
-
-
-.research-tab {
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    padding: 9px 17px;
-
-    border: 1px solid var(--border);
-
-    border-radius: 10px;
-
-    background: var(--surface);
+.page-heading p {
 
     color: var(--muted);
 
-    text-decoration: none;
-
     font-size: .9rem;
-
-    font-weight: 600;
-
-    transition:
-        background .2s ease,
-        color .2s ease,
-        border-color .2s ease,
-        transform .2s ease;
-
-}
-
-
-.research-tab:hover {
-
-    border-color:
-        rgba(31,66,150,.3);
-
-    color: var(--primary);
-
-    transform: translateY(-1px);
-
-}
-
-
-.research-tab.active {
-
-    background: var(--primary);
-
-    border-color: var(--primary);
-
-    color: white;
 
 }
 
 
 /* =========================
-   RESEARCH LIST
+   CURRENT VERSION
 ========================= */
 
-.research-list {
+.current-version {
 
-    display: grid;
+    display: flex;
 
-    grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+
+    padding: 18px 20px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 5px 18px rgba(35,48,108,.05);
+
+}
+
+
+.current-version span {
+
+    color: var(--muted);
+
+    font-size: .82rem;
+
+    font-weight: 500;
+
+}
+
+
+.current-version strong {
+
+    color: var(--primary);
+
+    font-size: 1.05rem;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================
+   VERSION LIST
+========================= */
+
+.version-list {
+
+    display: flex;
+
+    flex-direction: column;
 
     gap: 20px;
 
@@ -319,10 +300,10 @@ header {
 
 
 /* =========================
-   RESEARCH CARD
+   VERSION CARD
 ========================= */
 
-.research-card {
+.version-card {
 
     display: block;
 
@@ -336,8 +317,6 @@ header {
 
     color: var(--text);
 
-    text-decoration: none;
-
     box-shadow:
         0 5px 18px rgba(35,48,108,.05);
 
@@ -349,76 +328,50 @@ header {
 }
 
 
-.research-card:hover {
+.version-card:hover {
 
-    transform: translateY(-4px);
+    transform: translateY(-2px);
 
     border-color:
         rgba(31,66,150,.3);
 
     box-shadow:
-        0 12px 28px rgba(35,48,108,.12);
-
-}
-
-
-.research-card:active {
-
-    transform: translateY(-1px);
+        0 12px 28px rgba(35,48,108,.10);
 
 }
 
 
 /* =========================
-   CARD CONTENT
+   VERSION HEADER
 ========================= */
 
-.research-student {
-
-    display: block;
-
-    margin-bottom: 8px;
-
-    color: var(--primary);
-
-    font-size: .78rem;
-
-    font-weight: 600;
-
-}
-
-
-.research-card h2 {
-
-    margin-bottom: 8px;
-
-    color: var(--primary-dark);
-
-    font-size: 1.1rem;
-
-    line-height: 1.4;
-
-}
-
-
-.research-card p {
-
-    margin-bottom: 16px;
-
-    color: var(--muted);
-
-    font-size: .88rem;
-
-}
-
-
-.research-meta {
+.version-header {
 
     display: flex;
 
-    flex-wrap: wrap;
+    align-items: center;
 
-    gap: 8px 18px;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.version-header h2 {
+
+    color: var(--primary);
+
+    font-size: 1.15rem;
+
+    font-weight: 700;
+
+}
+
+
+.version-header span {
 
     color: var(--muted);
 
@@ -430,12 +383,53 @@ header {
 
 
 /* =========================
-   ERROR
+   VERSION CONTENT
 ========================= */
 
-.load-error {
+.version-card h3 {
 
-    grid-column: 1 / -1;
+    color: var(--primary-dark);
+
+    font-size: 1rem;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+
+}
+
+
+.version-card ul {
+
+    padding-left: 20px;
+
+}
+
+
+.version-card li {
+
+    color: var(--text);
+
+    font-size: .88rem;
+
+    margin-bottom: 5px;
+
+}
+
+
+.version-card li:last-child {
+
+    margin-bottom: 0;
+
+}
+
+
+/* =========================
+   LOADING / ERROR
+========================= */
+
+.loading,
+.error {
 
     padding: 40px;
 
@@ -445,25 +439,9 @@ header {
 
     border-radius: 16px;
 
-    text-align: center;
-
-}
-
-
-.load-error h2 {
-
-    color: var(--primary-dark);
-
-    font-size: 1.2rem;
-
-    margin-bottom: 8px;
-
-}
-
-
-.load-error p {
-
     color: var(--muted);
+
+    text-align: center;
 
     font-size: .9rem;
 
@@ -493,13 +471,30 @@ footer {
 
 .footer-logo {
 
-    width: 230px;
+    width: 250px;
 
     max-width: 80%;
 
     height: auto;
 
     margin-bottom: 18px;
+
+}
+
+
+.footer-iaf-logo {
+
+    display: block;
+
+    width: 150px;
+
+    max-width: 100%;
+
+    height: auto;
+
+    margin: 20px auto 0;
+
+    opacity: 20%;
 
 }
 
@@ -514,19 +509,12 @@ footer p {
 
 }
 
-.footer-iaf-logo{
 
-    display:block;
+#nexus-version {
 
-    width:150px;
+    margin-top: 10px;
 
-    max-width:100%;
-
-    height:auto;
-
-    margin:20px auto 0;
-
-    opacity: 20%;
+    font-weight: 600;
 
 }
 
@@ -592,32 +580,32 @@ footer p {
     }
 
 
-    .research-tabs {
+    .page-heading p {
 
-        gap: 8px;
-
-    }
-
-
-    .research-tab {
-
-        padding: 8px 14px;
-
-        font-size: .82rem;
+        font-size: .85rem;
 
     }
 
 
-    .research-list {
+    .current-version {
 
-        grid-template-columns: 1fr;
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 4px;
+
+    }
+
+
+    .version-list {
 
         gap: 14px;
 
     }
 
 
-    .research-card {
+    .version-card {
 
         padding: 18px;
 
@@ -626,9 +614,34 @@ footer p {
     }
 
 
-    .research-card h2 {
+    .version-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 2px;
+
+    }
+
+
+    .version-header h2 {
 
         font-size: 1rem;
+
+    }
+
+
+    .version-card h3 {
+
+        font-size: .95rem;
+
+    }
+
+
+    .version-card li {
+
+        font-size: .84rem;
 
     }
 

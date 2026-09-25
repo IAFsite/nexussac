@@ -13,7 +13,11 @@
 
 }
 
-
+    #nexus-version {
+        color: inherit !important;
+        text-decoration: none;
+    }
+    
 /* =========================
    RESET
 ========================= */
@@ -672,5 +676,7 @@ footer p {
         font-size: .9rem;
 
     }
+
+
 
 }

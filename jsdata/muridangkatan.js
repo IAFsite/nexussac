@@ -11,6 +11,53 @@ const NEXSAC_PROFILE_BASE =
 
 
 /* =========================
+   CHECK RESEARCH CONTENT
+========================= */
+
+function hasResearchContent(
+    research
+) {
+
+    if (!research) {
+
+        return false;
+
+    }
+
+
+    let content =
+        research.content;
+
+
+    /* =========================
+       CONTENT AS JSON STRING
+    ========================= */
+
+    if (typeof content === "string") {
+
+        try {
+
+            content =
+                JSON.parse(content);
+
+        } catch {
+
+            return false;
+
+        }
+
+    }
+
+
+    return (
+        Array.isArray(content) &&
+        content.length > 0
+    );
+
+}
+
+
+/* =========================
    FETCH GENERATION
 ========================= */
 
@@ -59,6 +106,107 @@ async function fetchGeneration(
         )
             ? studentsDatabase.students
             : [];
+
+
+    /* =========================
+       FETCH RESEARCH
+       ONLY THIS GENERATION
+    ========================= */
+
+    const researchResponse =
+        await fetch(
+            `${NEXSAC_API}/research?generation=${encodeURIComponent(
+                generationId
+            )}`
+        );
+
+
+    if (!researchResponse.ok) {
+
+        throw new Error(
+            `Data penelitian angkatan ${generationId} gagal dimuat (HTTP ${researchResponse.status})`
+        );
+
+    }
+
+
+    const researchDatabase =
+        await researchResponse.json();
+
+
+    const researchList =
+        Array.isArray(
+            researchDatabase.research
+        )
+            ? researchDatabase.research
+            : [];
+
+
+    /* =========================
+       FIND STUDENTS WITH
+       AT LEAST 1 RESEARCH
+    ========================= */
+
+    const researchStudentIds =
+        new Set();
+
+
+    researchList.forEach(
+        research => {
+
+            if (
+                !hasResearchContent(
+                    research
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const studentId =
+                String(
+                    research.student_id || ""
+                ).trim();
+
+
+            if (!studentId) {
+
+                return;
+
+            }
+
+
+            researchStudentIds.add(
+                studentId
+            );
+
+        }
+    );
+
+
+    /* =========================
+       FILTER STUDENTS
+       ONLY STUDENTS WITH RESEARCH
+    ========================= */
+
+    const studentsWithResearch =
+        students.filter(
+            student => {
+
+                const studentId =
+                    String(
+                        student.id || ""
+                    ).trim();
+
+
+                return researchStudentIds.has(
+                    studentId
+                );
+
+            }
+        );
 
 
     /* =========================
@@ -120,7 +268,8 @@ async function fetchGeneration(
 
             },
 
-        students
+        students:
+            studentsWithResearch
 
     };
 
@@ -129,13 +278,91 @@ async function fetchGeneration(
 
 /* =========================
    FETCH ALL STUDENTS
-   LAZY / PAGINATED
+   ONLY STUDENTS WITH RESEARCH
 ========================= */
 
 async function fetchAllStudents(
     limit = 20,
     offset = 0
 ) {
+
+    /* =========================
+       FETCH RESEARCH
+    ========================= */
+
+    const researchResponse =
+        await fetch(
+            `${NEXSAC_API}/research?limit=10000&offset=0`
+        );
+
+
+    if (!researchResponse.ok) {
+
+        throw new Error(
+            `Data penelitian gagal dimuat (HTTP ${researchResponse.status})`
+        );
+
+    }
+
+
+    const researchDatabase =
+        await researchResponse.json();
+
+
+    const research =
+        Array.isArray(
+            researchDatabase.research
+        )
+            ? researchDatabase.research
+            : [];
+
+
+    /* =========================
+       FIND STUDENTS WITH RESEARCH
+    ========================= */
+
+    const researchStudentIds =
+        new Set();
+
+
+    research.forEach(
+        item => {
+
+            if (
+                !hasResearchContent(
+                    item
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            const studentId =
+                String(
+                    item.student_id || ""
+                ).trim();
+
+
+            if (!studentId) {
+
+                return;
+
+            }
+
+
+            researchStudentIds.add(
+                studentId
+            );
+
+        }
+    );
+
+
+    /* =========================
+       FETCH STUDENTS
+    ========================= */
 
     const params =
         new URLSearchParams();
@@ -172,7 +399,7 @@ async function fetchAllStudents(
         await response.json();
 
 
-    const students =
+    const allStudents =
         Array.isArray(
             database.students
         )
@@ -180,24 +407,94 @@ async function fetchAllStudents(
             : [];
 
 
+    /* =========================
+       FILTER STUDENTS
+       ONLY WITH RESEARCH
+    ========================= */
+
+    const students =
+        allStudents.filter(
+            student => {
+
+                const studentId =
+                    String(
+                        student.id || ""
+                    ).trim();
+
+
+                return researchStudentIds.has(
+                    studentId
+                );
+
+            }
+        );
+
+
+    /* =========================
+       PAGINATION
+    ========================= */
+
+    const originalPagination =
+        database.pagination || {};
+
+
     return {
 
         students,
 
-        pagination:
-            database.pagination || {
+        pagination: {
 
-                limit,
+            limit,
 
-                offset,
+            offset,
 
-                hasMore:
-                    students.length >=
-                    limit
+            hasMore:
+                Boolean(
+                    originalPagination.hasMore
+                )
 
-            }
+        }
 
     };
+
+}
+
+
+/* =========================
+   FETCH SINGLE STUDENT
+========================= */
+
+async function fetchStudent(
+    studentId
+) {
+
+    if (!studentId) {
+
+        throw new Error(
+            "ID siswa tidak ditemukan."
+        );
+
+    }
+
+
+    const response =
+        await fetch(
+            `${NEXSAC_API}/students/${encodeURIComponent(
+                studentId
+            )}`
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Data siswa tidak dapat dimuat (HTTP ${response.status}).`
+        );
+
+    }
+
+
+    return await response.json();
 
 }
 

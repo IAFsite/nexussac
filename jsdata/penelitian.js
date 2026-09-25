@@ -55,6 +55,80 @@ let researchSearchRequestId = 0;
 
 
 /* =========================
+   RESEARCH CONTENT CHECK
+========================= */
+
+/*
+ * Content dari API dapat berbentuk:
+ *
+ * []
+ *
+ * atau:
+ *
+ * "[...]"
+ *
+ * Research hanya dianggap tersedia
+ * apabila content berisi minimal satu item.
+ */
+
+function hasResearchContent(
+    research
+) {
+
+    if (!research) {
+
+        return false;
+
+    }
+
+
+    let content =
+        research.content;
+
+
+    /*
+     * Kalau API mengirim JSON string,
+     * parse menjadi array.
+     */
+
+    if (
+        typeof content ===
+        "string"
+    ) {
+
+        try {
+
+            content =
+                JSON.parse(
+                    content
+                );
+
+        }
+
+        catch {
+
+            return false;
+
+        }
+
+    }
+
+
+    /*
+     * [] = kosong
+     *
+     * [...] = memiliki content
+     */
+
+    return (
+        Array.isArray(content) &&
+        content.length > 0
+    );
+
+}
+
+
+/* =========================
    FETCH RESEARCH
    BY GENERATION
 ========================= */
@@ -100,17 +174,47 @@ async function fetchResearchByGeneration(
             : [];
 
 
+    /*
+     * =========================
+     * FILTER CONTENT
+     * =========================
+     *
+     * Research tanpa content
+     * tidak diteruskan ke halaman.
+     */
+
+    const contentFilteredResearch =
+        researchList.filter(
+            research =>
+                hasResearchContent(
+                    research
+                )
+        );
+
+
+    /*
+     * =========================
+     * FILTER TYPE
+     * =========================
+     */
+
     const filteredResearch =
         researchType
-            ? researchList.filter(
+            ? contentFilteredResearch.filter(
                 item =>
                     String(item.type)
                         .toUpperCase() ===
                     String(researchType)
                         .toUpperCase()
             )
-            : researchList;
+            : contentFilteredResearch;
 
+
+    /*
+     * =========================
+     * FETCH STUDENTS
+     * =========================
+     */
 
     const studentsResponse =
         await fetch(
@@ -444,7 +548,9 @@ async function loadMoreResearch(
 
 
         /*
-         * Deduplicate research.
+         * =========================
+         * ADD + FILTER + DEDUP
+         * =========================
          */
 
         researchList.forEach(
@@ -452,6 +558,23 @@ async function loadMoreResearch(
                 research,
                 index
             ) => {
+
+                /*
+                 * Research tanpa content
+                 * tidak dimasukkan ke
+                 * allResearch.
+                 */
+
+                if (
+                    !hasResearchContent(
+                        research
+                    )
+                ) {
+
+                    return;
+
+                }
+
 
                 const researchId =
                     String(
@@ -510,12 +633,22 @@ async function loadMoreResearch(
         );
 
 
+        /*
+         * Offset tetap mengikuti
+         * jumlah data dari API.
+         *
+         * Jangan memakai jumlah data
+         * setelah filter content.
+         */
+
         allResearchOffset +=
             researchList.length;
 
 
         /*
-         * Pagination.
+         * =========================
+         * PAGINATION
+         * =========================
          */
 
         if (
@@ -539,10 +672,13 @@ async function loadMoreResearch(
 
 
         /*
-         * Fetch student data.
+         * =========================
+         * FETCH STUDENT DATA
+         * =========================
          */
 
         await Promise.all(
+
             allResearch
                 .slice(
                     currentOffset
@@ -566,11 +702,14 @@ async function loadMoreResearch(
 
                     }
                 )
+
         );
 
 
         /*
-         * Render.
+         * =========================
+         * RENDER
+         * =========================
          */
 
         if (!fromSearch) {
@@ -1170,6 +1309,24 @@ function renderResearch(
         item.research || {};
 
 
+    /*
+     * Safety check terakhir.
+     *
+     * Research tanpa content
+     * tidak boleh masuk DOM.
+     */
+
+    if (
+        !hasResearchContent(
+            research
+        )
+    ) {
+
+        return;
+
+    }
+
+
     const researchId =
         item.researchId;
 
@@ -1266,6 +1423,7 @@ function renderResearch(
 
             </div>
 
+
             <h2 class="research-title">
 
                 ${escapeHTML(
@@ -1274,6 +1432,7 @@ function renderResearch(
 
             </h2>
 
+
             <div class="research-student">
 
                 ${escapeHTML(
@@ -1281,6 +1440,7 @@ function renderResearch(
                 )}
 
             </div>
+
 
             <div class="research-id">
 

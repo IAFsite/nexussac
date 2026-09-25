@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Version History | NEXUS SAC</title>
+
+
+    <!-- =========================
+         FONT
+    ========================= -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+
+    <!-- =========================
+         CSS
+    ========================= -->
+
+    <link
+        rel="stylesheet"
+        href="css/version.css">
+
+
+    <!-- =========================
+         FAVICON
+    ========================= -->
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="icon-192.png">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="header-container">
+
+        <div class="header-brand">
+
+            <img
+                src="https://sekolahalamcikeas.sch.id/wp-content/uploads/2022/09/logo-sac-small.png"
+                class="logo-top"
+                alt="Sekolah Alam Cikeas">
+
+            <div class="header-title">
+
+                <h2>
+                    VERSION HISTORY
+                </h2>
+
+                <p>
+                    NEXUS SAC
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="index.html"
+            class="back-button">
+
+            Kembali
+
+        </a>
+
+    </div>
+
+</header>
+
+
+
+<main class="container">
+
+
+    <!-- =========================
+         PAGE HEADING
+    ========================= -->
+
+    <section class="page-heading">
+
+        <h1>
+            Version History
+        </h1>
+
+        <p>
+            Riwayat perkembangan dan pembaruan NEXUS SAC.
+        </p>
+
+    </section>
+
+
+    <!-- =========================
+         CURRENT VERSION
+    ========================= -->
+
+    <section class="current-version">
+
+        <span>
+            Current Version
+        </span>
+
+        <strong id="current-version">
+            Loading...
+        </strong>
+
+    </section>
+
+
+    <!-- =========================
+         VERSION LIST
+    ========================= -->
+
+    <section
+        id="version-list"
+        class="version-list">
+
+        <p class="loading">
+            Memuat version history...
+        </p>
+
+    </section>
+
+
+</main>
+
+
+
+<footer>
+
+    <img
+        src="asset/logo/image2.png"
+        class="footer-logo"
+        alt="Sekolah Alam Cikeas">
+
+
+    <p>
+
+        © 2026 Indonesia Advance Future (IAF)<br>
+
+        Supported by Sekolah Alam Cikeas
+
+    </p>
+
+
+    <img
+        src="asset/logo/iaf-logo.png"
+        class="footer-iaf-logo"
+        alt="Indonesia Advance Future">
+
+
+<a id="nexus-version">
+    Loading version...
+</a>
+
+</footer>
+
+
+
+<!-- =========================
+     VERSION HISTORY
+========================= -->
+
+<script>
+
+    fetch("version.json")
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error("Failed to load version data");
+            }
+
+            return response.json();
+
+        })
+
+        .then(data => {
+
+            const currentVersion =
+                document.getElementById("current-version");
+
+            const footerVersion =
+                document.getElementById("nexus-version");
+
+            const versionList =
+                document.getElementById("version-list");
+
+
+            /* =========================
+               CURRENT VERSION
+            ========================= */
+
+            if (currentVersion && data.current_version) {
+
+                currentVersion.textContent =
+                    `v${data.current_version}`;
+
+            }
+
+
+            /* =========================
+               FOOTER VERSION
+            ========================= */
+
+            if (footerVersion && data.current_version) {
+
+                footerVersion.textContent =
+                    `NEXUS SAC v${data.current_version}`;
+
+            }
+
+
+            /* =========================
+               VERSION HISTORY
+            ========================= */
+
+            if (!versionList || !Array.isArray(data.versions)) {
+                return;
+            }
+
+
+            versionList.innerHTML = "";
+
+
+            data.versions.forEach(version => {
+
+                const article =
+                    document.createElement("article");
+
+                article.className =
+                    "version-card";
+
+
+                const header =
+                    document.createElement("div");
+
+                header.className =
+                    "version-header";
+
+
+                const versionNumber =
+                    document.createElement("h2");
+
+                versionNumber.textContent =
+                    `v${version.version}`;
+
+
+                const date =
+                    document.createElement("span");
+
+                date.textContent =
+                    version.date;
+
+
+                header.appendChild(versionNumber);
+                header.appendChild(date);
+
+
+                const title =
+                    document.createElement("h3");
+
+                title.textContent =
+                    version.title;
+
+
+                const changes =
+                    document.createElement("ul");
+
+
+                if (Array.isArray(version.changes)) {
+
+                    version.changes.forEach(change => {
+
+                        const item =
+                            document.createElement("li");
+
+                        item.textContent =
+                            change;
+
+                        changes.appendChild(item);
+
+                    });
+
+                }
+
+
+                article.appendChild(header);
+                article.appendChild(title);
+                article.appendChild(changes);
+
+
+                versionList.appendChild(article);
+
+            });
+
+        })
+
+        .catch(error => {
+
+            console.error(
+                "Version history error:",
+                error
+            );
+
+
+            const versionList =
+                document.getElementById("version-list");
+
+
+            if (versionList) {
+
+                versionList.innerHTML = `
+                    <p class="error">
+                        Gagal memuat version history.
+                    </p>
+                `;
+
+            }
+
+        });
+
+</script>
+
+
+</body>
+
+</html>

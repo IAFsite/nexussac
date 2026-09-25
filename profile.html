@@ -11,8 +11,14 @@
 
     <title>Profil Murid | Sekolah Alam Cikeas</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
 
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
@@ -31,6 +37,7 @@
         src="jsdata/profile.js"
         defer>
     </script>
+
     <script
         src="js/profile.js"
         defer>
@@ -69,13 +76,14 @@
 
 
         <a
-    href="index.html"
-    class="back-button"
-    id="back-button">
+            href="index.html"
+            class="back-button"
+            id="back-button">
 
-    Kembali
+            Kembali
 
-</a>
+        </a>
+
     </div>
 
 </header>
@@ -192,6 +200,7 @@
         class="footer-logo"
         alt="Sekolah Alam Cikeas">
 
+
     <p>
 
         © 2026 Indonesia Advance Future (IAF)<br>
@@ -200,12 +209,60 @@
 
     </p>
 
+
     <img
         src="asset/logo/iaf-logo.png"
         class="footer-iaf-logo"
         alt="Indonesia Advance Future">
 
+
+    <!-- VERSION -->
+
+<a href="version.html" id="nexus-version">
+    Loading version...
+</a>
+
 </footer>
+
+
+<!-- =========================
+     VERSION
+========================= -->
+
+<script>
+
+    fetch("Version.json")
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error("Failed to load version data");
+            }
+
+            return response.json();
+
+        })
+
+        .then(data => {
+
+            const versionElement =
+                document.getElementById("nexus-version");
+
+            if (versionElement && data.current_version) {
+
+                versionElement.textContent =
+                    `NEXSAC v${data.current_version}`;
+
+            }
+
+        })
+
+        .catch(error => {
+
+            console.error("Version data error:", error);
+
+        });
+
+</script>
 
 
 </body>

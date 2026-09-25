@@ -154,11 +154,56 @@
         class="footer-iaf-logo"
         alt="Indonesia Advance Future">
 
+<a href="version.html" id="nexus-version">
+    Loading version...
+</a>
+
 </footer>
 
 
 <script src="jsdata/index.js"></script>
 <script src="js/index.js"></script>
+
+
+<!-- =========================
+     VERSION
+========================= -->
+
+<script>
+
+    fetch("version.json")
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error("Failed to load version data");
+            }
+
+            return response.json();
+
+        })
+
+        .then(data => {
+
+            const versionElement =
+                document.getElementById("nexus-version");
+
+            if (versionElement && data.current_version) {
+
+                versionElement.textContent =
+                    `NEXSAC v${data.current_version}`;
+
+            }
+
+        })
+
+        .catch(error => {
+
+            console.error("Version data error:", error);
+
+        });
+
+</script>
+
 
 </body>
 

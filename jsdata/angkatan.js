@@ -7,6 +7,53 @@ const NEXSAC_API =
 
 
 /* =========================
+   CHECK RESEARCH CONTENT
+========================= */
+
+function hasResearchContent(
+    research
+) {
+
+    if (!research) {
+
+        return false;
+
+    }
+
+
+    let content =
+        research.content;
+
+
+    /* =========================
+       CONTENT AS JSON STRING
+    ========================= */
+
+    if (typeof content === "string") {
+
+        try {
+
+            content =
+                JSON.parse(content);
+
+        } catch {
+
+            return false;
+
+        }
+
+    }
+
+
+    return (
+        Array.isArray(content) &&
+        content.length > 0
+    );
+
+}
+
+
+/* =========================
    FETCH GENERATIONS
 ========================= */
 
@@ -82,7 +129,7 @@ async function fetchGenerationData(
         await studentsResponse.json();
 
 
-    const students =
+    const allStudents =
         Array.isArray(
             studentsDatabase.students
         )
@@ -115,12 +162,77 @@ async function fetchGenerationData(
         await researchResponse.json();
 
 
-    const research =
+    const allResearch =
         Array.isArray(
             researchDatabase.research
         )
             ? researchDatabase.research
             : [];
+
+
+    /* =========================
+       ONLY RESEARCH WITH CONTENT
+    ========================= */
+
+    const research =
+        allResearch.filter(
+            item =>
+                hasResearchContent(item)
+        );
+
+
+    /* =========================
+       FIND STUDENTS WITH RESEARCH
+    ========================= */
+
+    const researchStudentIds =
+        new Set();
+
+
+    research.forEach(
+        item => {
+
+            const studentId =
+                String(
+                    item.student_id || ""
+                ).trim();
+
+
+            if (!studentId) {
+
+                return;
+
+            }
+
+
+            researchStudentIds.add(
+                studentId
+            );
+
+        }
+    );
+
+
+    /* =========================
+       ONLY STUDENTS WITH RESEARCH
+    ========================= */
+
+    const students =
+        allStudents.filter(
+            student => {
+
+                const studentId =
+                    String(
+                        student.id || ""
+                    ).trim();
+
+
+                return researchStudentIds.has(
+                    studentId
+                );
+
+            }
+        );
 
 
     /* =========================

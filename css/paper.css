@@ -18,7 +18,11 @@
 
 }
 
-
+    #nexus-version {
+        color: inherit !important;
+        text-decoration: none;
+    }
+    
 /* ==========================
    RESET
 ========================== */
@@ -886,5 +890,6 @@ footer p{
         margin:12px auto;
 
     }
+
 
 }

@@ -62,6 +62,64 @@ const isAllResearch =
 
 
 /* =========================
+   VALID RESEARCH CONTENT
+========================= */
+
+function hasResearchContent(
+    research
+) {
+
+    if (!research) {
+
+        return false;
+
+    }
+
+
+    let content =
+        research.content;
+
+
+    /*
+     * API dapat mengirim
+     * content sebagai JSON string.
+     */
+
+    if (typeof content === "string") {
+
+        try {
+
+            content =
+                JSON.parse(content);
+
+        }
+
+        catch {
+
+            return false;
+
+        }
+
+    }
+
+
+    /*
+     * Content harus berupa array
+     * dan memiliki minimal satu item.
+     *
+     * [] = tidak valid
+     * [...] = valid
+     */
+
+    return (
+        Array.isArray(content) &&
+        content.length > 0
+    );
+
+}
+
+
+/* =========================
    LOAD RESEARCH
 ========================= */
 
@@ -181,8 +239,26 @@ async function loadGenerationResearch() {
         researchList.innerHTML = "";
 
 
+        /*
+         * =========================
+         * FILTER CONTENT
+         * =========================
+         *
+         * Research tanpa content
+         * tidak boleh ditampilkan.
+         */
+
+        const validResearch =
+            researchListData.filter(
+                item =>
+                    hasResearchContent(
+                        item?.research
+                    )
+            );
+
+
         if (
-            researchListData.length === 0
+            validResearch.length === 0
         ) {
 
             showError(
@@ -195,7 +271,7 @@ async function loadGenerationResearch() {
         }
 
 
-        researchListData.forEach(
+        validResearch.forEach(
             ({ research, student }) => {
 
                 renderGenerationResearch(
@@ -491,6 +567,30 @@ async function loadMoreResearch(
             }
 
 
+            /*
+             * =========================
+             * CONTENT FILTER
+             * =========================
+             *
+             * Research seperti:
+             *
+             * content = []
+             *
+             * tidak akan masuk
+             * ke allResearch.
+             */
+
+            if (
+                !hasResearchContent(
+                    research
+                )
+            ) {
+
+                continue;
+
+            }
+
+
             const exists =
                 allResearch.some(
                     item =>
@@ -520,6 +620,12 @@ async function loadMoreResearch(
 
         }
 
+
+        /*
+         * Offset tetap menggunakan
+         * jumlah data dari API,
+         * bukan jumlah data yang lolos filter.
+         */
 
         allResearchOffset +=
             researchList.length;
@@ -558,16 +664,16 @@ async function loadMoreResearch(
          *
          * Gunakan student_id.
          *
-         * Karena ID student:
+         * Contoh:
          *
+         * student:
          * 09001
          *
-         * dan research:
-         *
+         * research:
          * 0900101
          *
-         * kita ambil generation dari
-         * 2 digit pertama.
+         * Angkatan:
+         * 09
          */
 
         const newItems =
@@ -632,8 +738,6 @@ async function loadMoreResearch(
         /*
          * Ambil siswa per angkatan,
          * bukan satu request per research.
-         *
-         * Jauh lebih ringan.
          */
 
         await Promise.all(
@@ -1259,6 +1363,23 @@ function renderAllResearchCard(
         return;
 
 
+    /*
+     * Safety check:
+     * jangan render research
+     * yang tidak punya content.
+     */
+
+    if (
+        !hasResearchContent(
+            item.research
+        )
+    ) {
+
+        return;
+
+    }
+
+
     if (
         researchList.querySelector(
             `[data-research-id="${CSS.escape(
@@ -1375,6 +1496,7 @@ function renderAllResearchCard(
                 <span>
 
                     NEXUS SAC |
+
                     ${escapeHTML(
                         student.id ||
                         research.student_id ||
@@ -1569,6 +1691,7 @@ function escapeHTML(
 
 }
 
+
 /* =========================
    BACK NAVIGATION
 ========================= */
@@ -1580,8 +1703,11 @@ function setupBackButton() {
             "back-button"
         );
 
+
     if (!backButton) {
+
         return;
+
     }
 
 
@@ -1592,8 +1718,6 @@ function setupBackButton() {
             /*
              * User datang dari halaman
              * internal Nexus SAC.
-             *
-             * Kembali ke halaman sebelumnya.
              */
 
             if (
