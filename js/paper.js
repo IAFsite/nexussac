@@ -57,6 +57,7 @@ function setupBackButton() {
              * Kalau user datang dari halaman
              * Nexus SAC sendiri, kembali ke sana.
              */
+
             if (
                 document.referrer &&
                 document.referrer.startsWith(
@@ -96,6 +97,7 @@ function setupBackButton() {
 setupBackButton();
 
 loadPaper();
+
 
 /* =========================
    LOAD PAPER
@@ -797,25 +799,47 @@ function parseMarkdown(
 
             if (src) {
 
-                const name =
-                    src
-                        .split("/")
-                        .pop();
+                const resolvedGeneration =
+                    generationId ||
+                    sessionStorage.getItem(
+                        "paperGeneration"
+                    ) ||
+                    "";
 
 
-                html += `
-                    <a
-                        class="edu-file"
-                        href="${escapeHTML(
-                            asset(src)
-                        )}"
-                        target="_blank"
-                        rel="noopener">
+                const mediaURL =
+                    getMediaURL(
+                        resolvedGeneration,
+                        src
+                    );
 
-                        ${parseInline(name)}
 
-                    </a>
-                `;
+                if (mediaURL) {
+
+                    const fileName =
+                        src
+                            .split("?")[0]
+                            .split("#")[0]
+                            .split("/")
+                            .filter(Boolean)
+                            .pop() ||
+                        "download";
+
+
+                    html += `
+                        <button
+                            type="button"
+                            class="edu-file"
+                            data-download-url="${escapeHTML(mediaURL)}"
+                            data-download-name="${escapeHTML(fileName)}"
+                            onclick="downloadMediaFile(this)">
+
+                            ${parseInline(fileName)}
+
+                        </button>
+                    `;
+
+                }
 
             }
 
@@ -951,6 +975,145 @@ function parseMarkdown(
 
 
     return html;
+
+}
+
+
+/* =========================
+   DOWNLOAD MEDIA FILE
+========================= */
+
+async function downloadMediaFile(
+    button
+) {
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    const url =
+        button.dataset.downloadUrl;
+
+
+    const fileName =
+        button.dataset.downloadName ||
+        "download";
+
+
+    if (!url) {
+
+        return;
+
+    }
+
+
+    const originalText =
+        button.textContent;
+
+
+    try {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Downloading...";
+
+
+        const response =
+            await fetch(
+                url
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP ${response.status}`
+            );
+
+        }
+
+
+        const blob =
+            await response.blob();
+
+
+        const blobURL =
+            URL.createObjectURL(
+                blob
+            );
+
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+
+        link.href =
+            blobURL;
+
+
+        link.download =
+            fileName;
+
+
+        document.body.appendChild(
+            link
+        );
+
+
+        link.click();
+
+
+        link.remove();
+
+
+        /*
+         * Jangan langsung revoke terlalu cepat
+         * di beberapa browser.
+         */
+
+        setTimeout(
+            function () {
+
+                URL.revokeObjectURL(
+                    blobURL
+                );
+
+            },
+            1000
+        );
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Gagal mengunduh file:",
+            error
+        );
+
+
+        alert(
+            "File gagal diunduh."
+        );
+
+    }
+
+
+    finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            originalText;
+
+    }
 
 }
 
